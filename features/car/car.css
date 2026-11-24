@@ -1,0 +1,45 @@
+/* car feature (PN-51): service reminders card, editor, calm notice */
+#car-card .car-odo .n { font-size: 26px; font-weight: 700; }
+#car-card .car-odo .c { white-space: normal; }
+.car-item .st { font-size: 16px; font-weight: 700; padding: 4px 10px; border-radius: 12px; background: var(--surface-3); color: var(--text-2); flex: none; }
+.car-item .st.due { background: var(--warn); color: var(--bg); }
+.car-item .st.soon { color: var(--warn); }
+.car-item svg.i { color: var(--text-2); }
+.car-none { color: var(--text-2); font-size: 18px; padding: 4px 2px; }
+#car-edit { position: fixed; inset: 0; z-index: 34; background: var(--scrim-2); display: none; }
+#car-edit.open { display: block; }
+#car-edit .ce-body { position: absolute; left: 16px; right: 16px; top: 12px; max-height: calc(100% - 24px); overflow-y: auto;
+  background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow); padding: 16px 18px; display: flex; flex-direction: column; gap: 12px;
+  overscroll-behavior: contain; touch-action: pan-y; }
+#car-edit.kb .ce-body { max-height: calc(100% - 400px); }   /* the on-screen keyboard takes the bottom */
+#car-edit .ce-ttl { font-size: 24px; font-weight: 700; }
+#car-edit [hidden] { display: none !important; }
+#car-edit .ce-kinds { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+#car-edit .ce-kinds button { min-height: 60px; font-size: 18px; padding: 0 6px; }
+#car-edit .ce-row { display: flex; align-items: center; gap: 12px; min-height: 60px; }
+#car-edit .ce-row > span { flex: 1; font-size: 20px; color: var(--text-2); min-width: 0; }
+#car-edit input { width: 220px; height: 60px; border: 0; border-radius: var(--radius-sm); background: var(--surface-2); color: var(--text);
+  font: inherit; font-size: 22px; padding: 0 14px; outline: none; }
+#car-edit input:focus { box-shadow: 0 0 0 3px var(--accent); }
+#car-edit #ce-name { width: 300px; }
+#car-edit .ce-step { display: flex; align-items: center; gap: 10px; }
+#car-edit .ce-step .btn { min-height: 60px; width: 60px; }
+#car-edit .ce-step .v { min-width: 130px; text-align: center; font-size: 22px; font-weight: 700; }
+#car-edit .ce-step.off .v, #car-edit .ce-step.off .btn.sq { opacity: .4; }
+#car-edit .ce-err { color: var(--danger); font-size: 18px; min-height: 0; }
+#car-edit .ce-err:empty { display: none; }
+#car-edit .actions { display: flex; gap: 12px; }
+@media (orientation: landscape) { #car-edit .ce-body { left: 50%; right: auto; width: min(760px, calc(100% - 32px)); transform: translateX(-50%); } }
+@media (orientation: portrait) { #car-edit input, #car-edit #ce-name { width: 200px; } #car-edit .ce-step .v { min-width: 100px; } }
+/* calm notice: only when the car stands still, never during guidance; gone as soon as it moves */
+#car-notice { position: fixed; left: 50%; bottom: 24px; transform: translate(-50%, 140%); z-index: 33; width: min(640px, calc(100% - 32px));
+  background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow); padding: 14px 16px; display: flex; flex-direction: column; gap: 12px;
+  transition: transform .25s var(--ease); visibility: hidden; }
+#car-notice.open { transform: translate(-50%, 0); visibility: visible; }
+#car-notice .h { display: flex; align-items: center; gap: 12px; }
+#car-notice .h svg.i { color: var(--warn); }
+#car-notice .t { font-size: 22px; font-weight: 700; }
+#car-notice .s { font-size: 18px; color: var(--text-2); }
+#car-notice .actions { display: flex; gap: 12px; }
+#car-notice .actions .btn { flex: 1; min-height: 64px; }
+@media (orientation: portrait) { #car-notice { bottom: calc(var(--dock-h) + 16px); } }

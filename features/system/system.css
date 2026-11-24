@@ -1,0 +1,69 @@
+/* system info card + power confirm dialog (system feature) */
+.sys-list { display: grid; grid-template-columns: auto 1fr; gap: 6px 18px; font-size: 19px; }
+.sys-list .k { color: var(--text-2); }
+.sys-list .v { text-align: right; overflow-wrap: anywhere; }
+.sys-list .v.warn { color: var(--warn); }
+.sys-list .sep { grid-column: 1 / -1; height: 1px; background: var(--surface-3); margin: 4px 0; }
+#sys-card .seg .btn { display: flex; align-items: center; justify-content: center; gap: 10px; min-height: var(--tap); font-size: 20px; border-radius: var(--radius-sm); }
+#sys-card .seg .btn.ghost { background: var(--surface-2); }
+.pwr-scrim { position: fixed; inset: 0; z-index: 60; background: var(--scrim-2); display: grid; place-items: center; padding: 24px; }
+.pwr-box { background: var(--surface); border-radius: var(--radius); padding: 24px; width: min(520px, 100%); display: flex; flex-direction: column; gap: 18px; box-shadow: var(--shadow); }
+.pwr-box h2 { margin: 0; font-size: 26px; }
+.pwr-box p { margin: 0; font-size: 20px; color: var(--text-2); }
+.pwr-box .acts { display: flex; gap: 12px; }
+.pwr-box .acts .btn { flex: 1; min-height: var(--tap); font-size: 21px; border-radius: var(--radius-sm); background: var(--surface-2); }
+.pwr-box .acts .btn.go { background: var(--danger); color: var(--danger-on); font-weight: 700; }
+/* updates card (PN-22/23) */
+#upd-card .hint.warn { color: var(--warn); font-weight: 600; }
+#upd-card .btn.wide { display: flex; align-items: center; justify-content: center; gap: 10px; min-height: var(--tap); font-size: 20px; border-radius: var(--radius-sm); }
+#upd-card .btn.ghost { background: var(--surface-2); }
+#upd-card .btn:disabled { opacity: .45; }
+.upd-url input { width: 100%; box-sizing: border-box; min-height: var(--tap); font-size: 21px; padding: 0 16px; border-radius: var(--radius-sm); background: var(--surface-2); color: var(--text); border: 0; }
+.upd-sub { margin-top: 10px; min-height: 40px; }
+.upd-sub .t { font-size: 21px; }
+#upd-card .row .acts .btn.on { background: var(--accent); color: var(--accent-on); }
+#upd-card .row .st { font-size: 17px; color: var(--text-2); overflow-wrap: anywhere; }
+#upd-card .row .st.ok { color: var(--accent); }
+#upd-card .row .st.err { color: var(--warn); }
+#upd-card .row .n { white-space: normal; }
+.upd-job { display: flex; flex-direction: column; gap: 10px; background: var(--surface-2); border-radius: var(--radius-sm); padding: 14px; }
+.upd-job[hidden] { display: none; }
+.upd-job .qrow .btn { flex: 1; }
+.upd-log { margin: 0; max-height: 220px; overflow: auto; background: var(--surface-2); border-radius: var(--radius-sm); padding: 10px; font-size: 14px; white-space: pre-wrap; overflow-wrap: anywhere; }
+.pwr-box.upd-box p { white-space: pre-line; }
+.pwr-box .acts .btn.go.safe { background: var(--accent); color: var(--accent-on); }
+
+/* Restart / Shut down at the bottom of the Settings category list (moved there by system.js) */
+#settings .st-rail .st-power { flex: none; display: flex; flex-direction: column; gap: 8px; padding: 10px 10px 12px; border-top: 1px solid var(--hair); }
+#settings .st-rail .st-power .btn { min-height: 56px; width: 100%; justify-content: flex-start; gap: 12px; padding: 0 16px; }
+@media (orientation: portrait) {
+  #settings .st-rail .st-power { padding: 8px 8px 10px; }
+  #settings .st-rail .st-power .btn { justify-content: center; padding: 0; }
+  #settings .st-rail .st-power .btn span { display: none; }
+}
+/* icon-only category rail on tiny / narrow screens (core/scale.js data-fit) */
+:root:is([data-fit~="tiny"], [data-fit~="narrow"]) #settings .st-rail .st-power { padding: 8px 8px 10px; }
+:root:is([data-fit~="tiny"], [data-fit~="narrow"]) #settings .st-rail .st-power .btn { justify-content: center; padding: 0; }
+:root:is([data-fit~="tiny"], [data-fit~="narrow"]) #settings .st-rail .st-power .btn span { display: none; }
+
+/* Settings > Pi health (health.js) */
+#health-card .card-h { flex-wrap: wrap; }
+#health-card .hl-note { flex-basis: 100%; margin: 2px 0 0 58px; font-size: 16px; }
+.hl-tiles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin: 4px 0 14px; }
+.hl-tile { background: var(--surface-2); border-radius: 14px; padding: 12px 14px; display: grid; grid-template-columns: auto 1fr; align-items: baseline; column-gap: 6px; min-width: 0; }
+.hl-tile .v { font-size: 34px; font-weight: 700; color: var(--ok); line-height: 1.1; white-space: nowrap; }
+.hl-tile .u { font-size: 17px; color: var(--text-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.hl-tile .k { grid-column: 1 / -1; font-size: 16px; color: var(--text-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.hl-tile.warn .v { color: var(--warn); } .hl-tile.bad .v { color: var(--danger); }
+.hl-charts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-bottom: 14px; }
+.hl-chart { background: var(--surface-2); border-radius: 14px; padding: 10px 12px 8px; min-width: 0; }
+.hl-ch-h { display: flex; justify-content: space-between; gap: 8px; font-size: 15px; color: var(--text-2); }
+.hl-ch-h .k { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } .hl-ch-h .v { flex: none; white-space: nowrap; color: var(--text); font-weight: 700; }
+.hl-chart svg { display: block; width: 100%; height: 64px; margin-top: 6px; }
+.hl-chart polyline { stroke: var(--accent); }
+.hl-chart.empty svg { opacity: .3; }
+#hl-list .v.ok { color: var(--ok); } #hl-list .v.bad { color: var(--danger); } #hl-list .v.warn { color: var(--warn); }
+@media (orientation: portrait) {
+  .hl-tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .hl-charts { grid-template-columns: 1fr; }
+}

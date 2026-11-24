@@ -1,0 +1,46 @@
+/* imagery feature: Satellite map button (in #fabs), Settings card "Satellite areas", choose-on-map frame */
+#btn-sat[hidden] { display: none; }
+#btn-sat.on { background: var(--accent); color: var(--accent-on); }
+#btn-sat.on .i { fill: currentColor; }
+#btn-sat.nocov { background: var(--surface-2); color: var(--accent); box-shadow: var(--shadow), inset 0 0 0 4px var(--accent); }   /* on, but no photos here */
+/* MapLibre's attribution text over a photo: keep it legible */
+.maplibregl-ctrl-attrib.maplibregl-compact-show, .maplibregl-ctrl-attrib-inner { font-size: 13px; }
+
+#sat-card .row .c { white-space: normal; overflow-wrap: anywhere; }
+#sat-card .row .acts .btn { min-height: 56px; padding: 0 16px; font-size: 18px; }
+#sat-card .btn.ghost { background: var(--surface-3); }   /* the card's boxes are surface-2: a ghost button would vanish */
+.sat-dl, .sat-usb { display: flex; flex-direction: column; gap: 10px; background: var(--surface-2); border-radius: var(--radius-sm); padding: 14px; }
+.sat-lbl { display: flex; align-items: center; gap: 12px; font-size: 21px; font-weight: 700; }
+.sat-lbl2 { font-size: 18px; color: var(--text-2); padding: 0 4px; }
+.sat-area-btns .btn { flex: 1 1 0; min-width: 0; min-height: 60px; font-size: 19px; padding: 0 12px; gap: 10px; background: var(--surface-3); }
+.sat-area { font-size: 19px; padding: 0 4px; }
+#sat-level button { background: var(--surface-3); }
+#sat-level button.on { background: var(--accent); }
+.sat-dl .row, .sat-usb .row { background: var(--surface-3); }
+.sat-prov { width: 100%; text-align: left; min-height: 64px; }
+.sat-prov .dot { width: 26px; height: 26px; border-radius: 50%; border: 3px solid var(--text-2); flex: none; }
+.sat-prov.on .dot { border-color: var(--accent); background: radial-gradient(circle, var(--accent) 0 45%, transparent 50%); }
+.sat-prov.on { box-shadow: inset 0 0 0 2px var(--accent); }
+.sat-est { font-size: 19px; padding: 0 4px; min-height: 26px; }
+.sat-est.warn { color: var(--warn); }
+#sat-start:disabled { opacity: .45; }
+.sat-job { display: flex; flex-direction: column; gap: 10px; background: var(--surface-2); border-radius: var(--radius-sm); padding: 14px; }
+.sat-job[hidden], .sat-usb[hidden] { display: none; }
+.sat-job-t { font-size: 20px; font-weight: 600; overflow-wrap: anywhere; }
+.sat-job-s { font-size: 18px; color: var(--text-2); }
+.sat-job .qrow .btn { flex: 1 1 0; }
+
+/* choose on map: the area is the frame; the map moves under it */
+#sat-frame { position: absolute; left: 10%; right: 10%; top: 16%; bottom: 30%; z-index: 20; pointer-events: none; display: none;
+  border: 3px dashed var(--accent); border-radius: 12px; box-shadow: 0 0 0 9999px rgba(0, 0, 0, .35); }
+#maps.sat-picking #sat-frame { display: block; }
+#maps.sat-picking #searchbar, #maps.sat-picking #fabs, #maps.sat-picking #sheet, #maps.sat-picking #search-results { display: none; }
+#sat-pickbar { top: auto; bottom: 16px; }
+#sat-pickbar .sp-t { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+#sat-pickbar .ttl { white-space: normal; }
+#sat-pickbar .sp-est { font-size: 18px; color: var(--text-2); }
+#sat-pickbar .actions .btn { flex: 1 1 0; min-width: 0; }
+@media (orientation: landscape) {
+  #sat-frame { left: 8%; right: 8%; top: 8%; bottom: 34%; }
+  #sat-pickbar { top: auto; bottom: 12px; left: 50%; transform: translateX(-50%); width: min(760px, calc(100% - 32px)); }
+}

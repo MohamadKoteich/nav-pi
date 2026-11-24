@@ -1,0 +1,24 @@
+{
+  "id": "bluetooth",
+  "name": "Bluetooth devices (speakers, …)",
+  "requires": [
+    "core",
+    "audio"
+  ],
+  "status": "stable",
+  "app": {
+    "js": [
+      "bluetooth.js"
+    ]
+  },
+  "fragments": {
+    "settings": "settings.html"
+  },
+  "pi": {
+    "packages": [
+      "bluez",
+      "libspa-0.2-bluetooth"
+    ],
+    "services": []
+  }
+}

@@ -1,0 +1,37 @@
+      <div class="card" data-cat="health" id="health-card">
+        <div class="card-h"><svg class="i"><use href="#i-speed"/></svg><span class="t" data-i18n="hl"></span><span class="hint hl-note" data-i18n="hl.local"></span></div>
+        <div class="hl-tiles" id="hl-tiles"></div>
+        <div class="hl-charts" id="hl-charts"></div>
+        <div class="sys-list" id="hl-list"></div>
+      </div>
+      <div class="card" data-cat="system" id="sys-card">
+        <div class="card-h"><svg class="i"><use href="#i-info"/></svg><span class="t" data-i18n="sys"></span></div>
+        <div class="sys-list" id="sys-list"></div>
+        <div class="seg st-power" id="st-power">   <!-- moved to the bottom of the Settings list by system.js -->
+          <button class="btn ghost" data-pwr="reboot" data-i18n-label="sys.restart"><svg class="i"><use href="#i-restart"/></svg><span data-i18n="sys.restart"></span></button>
+          <button class="btn danger" data-pwr="poweroff" data-i18n-label="sys.shutdown"><svg class="i"><use href="#i-power"/></svg><span data-i18n="sys.shutdown"></span></button>
+        </div>
+      </div>
+      <div class="card" data-cat="system" id="upd-card">
+        <div class="card-h"><svg class="i"><use href="#i-refresh"/></svg><span class="t" data-i18n="upd"></span></div>
+        <div class="hint warn" id="upd-parked" data-i18n="upd.parked" hidden></div>
+        <div class="hint" id="upd-installed"></div>
+        <div class="hint" data-i18n="upd.hint"></div>
+        <div class="upd-url"><input id="upd-url" type="text" inputmode="none" autocomplete="off" autocapitalize="off" spellcheck="false" data-i18n-ph="upd.url"></div>
+        <button class="btn primary wide" id="upd-check"><svg class="i"><use href="#i-refresh"/></svg><span data-i18n="upd.check"></span></button>
+        <div class="hint" id="upd-msg"></div>
+        <div class="list" id="upd-bundles"></div>
+        <div class="upd-job" id="upd-job" hidden>
+          <div class="hint" id="upd-job-t"></div>
+          <div class="usb-bar"><div id="upd-bar"></div></div>
+          <div class="qrow" id="upd-job-b"></div>
+        </div>
+        <div class="card-h upd-sub"><span class="t" data-i18n="upd.regions"></span></div>
+        <div class="list" id="upd-regions"></div>
+        <button class="btn ghost wide" id="upd-rollback" hidden><span data-i18n="upd.rollback"></span></button>
+        <div class="card-h upd-sub"><span class="t" data-i18n="upd.os"></span></div>
+        <div class="hint" data-i18n="upd.os.hint"></div>
+        <button class="btn ghost wide" id="upd-os"><span data-i18n="upd.os.start"></span></button>
+        <div class="hint" id="upd-os-t"></div>
+        <pre class="upd-log" id="upd-os-log" hidden></pre>
+      </div>

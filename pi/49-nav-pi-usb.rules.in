@@ -1,0 +1,18 @@
+// nav-pi: let the navd service (user @USER@, no login session) mount, unmount and power off USB sticks through udisks2.
+// Installed by scripts/20-setup-pi.sh and 22-update-app.sh (the usb feature). Removable drives only: mounting a
+// system / internal disk is a different action (filesystem-mount-system) that this rule does not grant; no formatting,
+// no loop devices, no encrypted-volume unlock, no settings changes.
+polkit.addRule(function(action, subject) {
+  var ok = [
+    "org.freedesktop.udisks2.filesystem-mount",
+    "org.freedesktop.udisks2.filesystem-mount-other-seat",
+    "org.freedesktop.udisks2.filesystem-unmount-others",
+    "org.freedesktop.udisks2.eject-media",
+    "org.freedesktop.udisks2.eject-media-other-seat",
+    "org.freedesktop.udisks2.power-off-drive",
+    "org.freedesktop.udisks2.power-off-drive-other-seat"
+  ];
+  if (subject.user == "@USER@" && ok.indexOf(action.id) >= 0) {
+    return polkit.Result.YES;
+  }
+});

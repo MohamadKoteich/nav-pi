@@ -1,0 +1,19 @@
+/* safety feature (PN-44/45/46): one calm alert card under the maneuver banner + its Settings cards */
+#sa-card { position: absolute; left: 12px; right: 12px; top: 96px; z-index: 12; display: none; align-items: center; gap: 16px;
+  padding: 14px 18px; border-radius: var(--radius); background: var(--surface); color: var(--text);
+  box-shadow: 0 6px 24px rgba(0,0,0,.35); border-left: 10px solid var(--warn); }
+#sa-card.open { display: flex; }
+#sa-card.info { border-left-color: var(--accent); }
+#sa-card .sa-i { width: 52px; height: 52px; flex: none; fill: var(--warn); }
+#sa-card.info .sa-i { fill: var(--accent); }
+#sa-card .sa-m { flex: 1; min-width: 0; }
+#sa-card .sa-t { font-size: 26px; font-weight: 700; line-height: 1.15; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#sa-card .sa-s { font-size: 20px; color: var(--text-2); margin-top: 4px; }
+#sa-card .sa-x { width: 64px; height: 64px; border-radius: 50%; background: var(--surface-2); color: var(--text); display: grid; place-items: center; flex: none; }
+#sa-card .sa-x[hidden] { display: none; }
+@media (orientation: landscape) { #sa-card { right: auto; width: min(460px, 55%); } }
+.sf-row { display: flex; align-items: center; gap: 16px; min-height: 60px; }
+.sf-row .t { flex: 1; font-size: 21px; }
+.sf-lbl { font-size: 18px; color: var(--text-2); }
+.sf-legal { font-size: 19px; line-height: 1.35; padding: 12px 14px; border-radius: var(--radius-sm); background: var(--danger-bg); color: var(--text); }
+#sf-brkmin.dim { opacity: .45; }

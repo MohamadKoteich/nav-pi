@@ -1,0 +1,45 @@
+      <!-- PN-51 service reminders (date and/or km), stored on the Pi by navd_car.py -->
+      <div class="card" data-cat="car" id="car-card">
+        <div class="card-h"><svg class="i"><use href="#i-wrench"/></svg><span class="t" data-i18n="car.title"></span></div>
+        <div class="car-odo row"><div class="main"><div class="n num" id="car-km">–</div><div class="c" id="car-km-src"></div></div>
+          <div class="acts"><button class="btn" id="car-odo-btn" data-i18n="car.odoEnter"></button></div></div>
+        <div id="car-list" class="list"></div>
+        <button class="btn primary wide" id="car-add"><svg class="i"><use href="#i-plus"/></svg><span data-i18n="car.add"></span></button>
+      </div>
+      <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+        <symbol id="i-wrench" viewBox="0 0 24 24"><path d="M22.7 19 13.6 9.9c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/></symbol>
+        <symbol id="i-oil" viewBox="0 0 24 24"><path d="M12 2s-6 6.6-6 11a6 6 0 0 0 12 0c0-4.4-6-11-6-11zm0 15.5A3.5 3.5 0 0 1 8.5 14h2a1.5 1.5 0 0 0 1.5 1.5z"/></symbol>
+        <symbol id="i-tyre" viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 4a6 6 0 1 1 0 12 6 6 0 0 1 0-12zm0 3a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/></symbol>
+        <symbol id="i-check" viewBox="0 0 24 24"><path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></symbol>
+      </svg>
+      <!-- editor (opened from the card; refused while the car moves) -->
+      <div id="car-edit" role="dialog" aria-modal="true" data-i18n-label="car.title">
+        <div class="ce-body">
+          <div class="ce-ttl" id="ce-title"></div>
+          <div class="seg ce-kinds" id="ce-kinds">
+            <button data-kind="oil" data-i18n="car.k.oil"></button><button data-kind="inspection" data-i18n="car.k.inspection"></button>
+            <button data-kind="tyres" data-i18n="car.k.tyres"></button><button data-kind="custom" data-i18n="car.k.custom"></button></div>
+          <label class="ce-row" id="ce-name-row"><span data-i18n="car.name"></span>
+            <input id="ce-name" inputmode="none" autocomplete="off" maxlength="40" data-i18n-ph="car.namePh"></label>
+          <div class="ce-row"><span data-i18n="car.dueDate"></span>
+            <div class="ce-step"><button class="btn sq" id="ce-m-minus" data-i18n-label="car.earlier"><svg class="i"><use href="#i-minus"/></svg></button>
+              <span class="v num" id="ce-month"></span>
+              <button class="btn sq" id="ce-m-plus" data-i18n-label="car.later"><svg class="i"><use href="#i-plus"/></svg></button>
+              <button class="switch" id="ce-date-on" role="switch" aria-checked="false" data-i18n-label="car.byDate"><span></span></button></div></div>
+          <label class="ce-row"><span data-i18n="car.dueKm"></span>
+            <input id="ce-km" class="num" inputmode="none" autocomplete="off" data-i18n-ph="car.kmPh"></label>
+          <div class="ce-row"><span data-i18n="car.everyMonths"></span>
+            <div class="ce-step"><button class="btn sq" id="ce-e-minus" data-i18n-label="car.less"><svg class="i"><use href="#i-minus"/></svg></button>
+              <span class="v num" id="ce-every"></span>
+              <button class="btn sq" id="ce-e-plus" data-i18n-label="car.more"><svg class="i"><use href="#i-plus"/></svg></button></div></div>
+          <label class="ce-row"><span data-i18n="car.everyKm"></span>
+            <input id="ce-everykm" class="num" inputmode="none" autocomplete="off" data-i18n-ph="car.kmPh"></label>
+          <label class="ce-row" id="ce-odo-row"><span data-i18n="car.odoNow"></span>
+            <input id="ce-odo" class="num" inputmode="none" autocomplete="off" data-i18n-ph="car.kmPh"></label>
+          <div class="ce-err" id="ce-err" role="alert"></div>
+          <div class="actions">
+            <button class="btn ghost sq" id="ce-cancel" data-i18n-label="cancel"><svg class="i"><use href="#i-close"/></svg></button>
+            <button class="btn danger sq" id="ce-del" data-i18n-label="car.delete"><svg class="i"><use href="#i-trash"/></svg></button>
+            <button class="btn primary" id="ce-save"><svg class="i"><use href="#i-check"/></svg><span data-i18n="car.save"></span></button></div>
+        </div>
+      </div>

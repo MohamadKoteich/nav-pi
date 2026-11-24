@@ -1,0 +1,28 @@
+{
+  "id": "voice",
+  "name": "Spoken directions (recorded voice pack, espeak-ng fallback) + voice options",
+  "requires": [
+    "core"
+  ],
+  "status": "stable",
+  "app": {
+    "css": [
+      "voice.css"
+    ],
+    "js": [
+      "voice.js"
+    ]
+  },
+  "fragments": {
+    "settings": "settings.html"
+  },
+  "pi": {
+    "packages": [
+      "espeak-ng",
+      "pipewire",
+      "wireplumber",
+      "pipewire-pulse"
+    ],
+    "services": []
+  }
+}

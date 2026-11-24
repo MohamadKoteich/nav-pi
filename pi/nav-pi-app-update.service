@@ -1,0 +1,6 @@
+[Unit]
+Description=nav-pi app update (copies the verified bundle from /srv/navdata/updates/app-staged), started from Settings > Updates
+[Service]
+Type=oneshot
+ExecStart=/usr/local/lib/nav-pi/apply-app-update.sh
+TimeoutStartSec=15min

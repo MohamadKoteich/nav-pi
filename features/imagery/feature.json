@@ -1,0 +1,28 @@
+{
+  "id": "imagery",
+  "name": "Satellite / aerial photo map layer from offline MBTiles packs (TMS scheme); download areas over Wi-Fi, import from USB",
+  "requires": [
+    "core",
+    "nav"
+  ],
+  "status": "stable",
+  "app": {
+    "css": [
+      "imagery.css"
+    ],
+    "js": [
+      "imagery-i18n.js",
+      "imagery.js"
+    ]
+  },
+  "fragments": {
+    "settings": "settings.html"
+  },
+  "pi": {
+    "packages": [],
+    "services": []
+  },
+  "data": [
+    "imagery"
+  ]
+}

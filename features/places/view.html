@@ -1,0 +1,55 @@
+    <!-- rail page "Places" (like a car navigator's "My Places"): Home + Work tiles, favourites, parked car, recent
+         destinations. Reads and writes the SAME device store as the Maps search panel (navpi.places / parked / recents). -->
+    <section class="view page" id="places" data-i18n-label="app.places">
+      <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+        <symbol id="i-places" viewBox="0 0 24 24"><path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2zm0 15-5-2.18L7 18V5h10v13z"/></symbol>
+        <symbol id="i-home-f" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></symbol>
+        <symbol id="i-work" viewBox="0 0 24 24"><path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"/></symbol>
+        <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></symbol>
+        <symbol id="i-edit" viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></symbol>
+      </svg>
+      <header class="pg-head"><h1 data-i18n="app.places"></h1></header>
+      <div class="pg-body" id="pl-body">
+        <div class="pl-tiles" id="pl-tiles"></div>
+        <div class="card" id="pl-favs-card">
+          <div class="card-h"><svg class="i"><use href="#i-star"/></svg><span class="t" data-i18n="pl.favs"></span>
+            <button class="btn ghost pl-add" id="pl-add"><svg class="i"><use href="#i-plus"/></svg><span data-i18n="pl.add"></span></button></div>
+          <div class="pl-list" id="pl-favs"></div>
+        </div>
+        <div class="card" id="pl-park-card" hidden>
+          <div class="card-h"><svg class="i"><use href="#i-park"/></svg><span class="t" data-i18n="park.car"></span></div>
+          <div class="pl-list" id="pl-park"></div>
+        </div>
+        <div class="card" id="pl-recent-card">
+          <div class="card-h"><svg class="i"><use href="#i-history"/></svg><span class="t" data-i18n="pl.recent"></span></div>
+          <div class="pl-list" id="pl-recent"></div>
+        </div>
+      </div>
+      <!-- pick a place for Home / Work / a new favourite: search, current position or the map centre -->
+      <div class="navpanel pl-panel" id="pl-pick" role="dialog" aria-labelledby="pl-pick-t">
+        <div class="pl-ph"><div class="ttl" id="pl-pick-t"></div>
+          <button class="ico" id="pl-pick-x" data-i18n-label="cancel"><svg class="i"><use href="#i-close"/></svg></button></div>
+        <div class="pf-in"><input id="pl-q" inputmode="none" autocomplete="off" data-i18n-ph="pl.searchPh" data-i18n-label="pl.searchPh">
+          <button class="ico" id="pl-q-clear" data-i18n-label="fav.clear"><svg class="i"><use href="#i-close"/></svg></button></div>
+        <div class="pl-results" id="pl-results"></div>
+      </div>
+      <!-- name / edit a place: rename, move, delete (delete asks once more) -->
+      <div class="navpanel pl-panel" id="pl-edit" role="dialog" aria-labelledby="pl-edit-t">
+        <div class="ttl" id="pl-edit-t"></div>
+        <div class="hint" id="pl-edit-sub"></div>
+        <div class="pf-in" id="pl-edit-in"><input id="pl-name" inputmode="none" autocomplete="off" data-i18n-ph="fav.name" data-i18n-label="fav.name">
+          <button class="ico" id="pl-name-clear" data-i18n-label="fav.clear"><svg class="i"><use href="#i-close"/></svg></button></div>
+        <div class="actions" id="pl-edit-acts">
+          <button class="btn ghost sq" id="pl-edit-x" data-i18n-label="cancel"><svg class="i"><use href="#i-close"/></svg></button>
+          <button class="btn ghost" id="pl-change"><svg class="i"><use href="#i-search"/></svg><span data-i18n="pl.change"></span></button>
+          <button class="btn danger sq" id="pl-del" data-i18n-label="fav.delete"><svg class="i"><use href="#i-trash"/></svg></button>
+          <button class="btn ghost sq" id="pl-up" data-i18n-label="pl.up"><svg class="i"><use href="#i-up"/></svg></button>
+          <button class="btn ghost sq" id="pl-down" data-i18n-label="pl.down"><svg class="i"><use href="#i-down"/></svg></button>
+          <button class="btn primary" id="pl-save"><svg class="i"><use href="#i-star"/></svg><span id="pl-save-l"></span></button></div>
+      </div>
+      <!-- confirm (delete, or change the destination while driving) -->
+      <div class="pl-scrim" id="pl-confirm" role="alertdialog" aria-labelledby="pl-cf-t" hidden>
+        <div class="pl-box"><h2 id="pl-cf-t"></h2><p id="pl-cf-p"></p>
+          <div class="acts"><button class="btn ghost" id="pl-cf-no"></button><button class="btn" id="pl-cf-yes"></button></div></div>
+      </div>
+    </section>

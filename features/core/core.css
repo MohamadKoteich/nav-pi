@@ -1,0 +1,291 @@
+/* nav-pi head unit — design tokens + layout.
+   Style: dark OLED-friendly, high contrast, glanceable. Targets >= 64px (driving: bigger than 48dp).
+   Works portrait (720x1280, native Touch Display 2) and landscape. Font: Noto Sans (installed).
+   ANY SCREEN (2026-11-22): every size below is written for a 720 px short side; core/scale.js sets --ui-s from the real
+   screen (and Settings > Screen > UI size) and `html { zoom }` scales the whole UI with it. Never size things from the
+   viewport (vw/vh) or with media queries on px; use the data-fit classes (short / tiny / narrow / wide). docs/UI-RULES.md "Screen sizes". */
+:root {
+  --bg: #0b0d10;
+  --surface: #15191f;
+  --surface-2: #1e242c;
+  --surface-3: #2a323d;
+  --text: #f4f6f8;
+  --text-2: #b9c2cc;          /* 9.6:1 on --surface */
+  --text-3: #8a95a1;          /* 5.3:1 on --surface (labels only) */
+  --accent: #4c9dff;          /* route / primary */
+  --accent-on: #04101f;
+  --guide: #12804a;           /* maneuver banner (Google-like green), white text 5.1:1 */
+  --guide-2: #0d6639;
+  --warn: #ffb020;
+  --danger: #ff5a52;
+  --ok: #3fcf7f;
+  --radius: 20px;
+  --radius-sm: 14px;
+  --tap: 72px;                /* minimum touch target */
+  --gap: 12px;
+  --status-h: 56px;   /* clock readable at a glance while driving */
+  --dock-h: 88px;
+  --font: "Noto Sans", "DejaVu Sans", sans-serif;
+  --shadow: 0 6px 24px rgba(0, 0, 0, .45);
+  --line: #222a33;            /* dock divider */
+  --scrim: rgba(0, 0, 0, .45);
+  --scrim-2: rgba(0, 0, 0, .6);
+  --toast-bg: rgba(21, 25, 31, .95);
+  --kbd-bg: #0f1318;
+  --kbd-down: #3a4554;
+  --tile-a: #16324f; --tile-b: #0f1d2c;
+  --danger-bg: #3a1d1f;
+  --danger-on: #1a0505;
+  --switch-off: var(--surface-3);
+  --hair: rgba(255, 255, 255, .08);   /* card borders + row separators */
+  --rail-bg: rgba(255, 255, 255, .025);
+  --ico-l: 72%;                        /* category icon tile: icon lightness / tile alpha */
+  --ico-a: .2;
+  --ease: cubic-bezier(.2, .8, .2, 1);
+  --ui-s: 1;                  /* UI scale, set by core/scale.js (0.8 … ~2); --ui-inv = 1 / --ui-s */
+  --ui-inv: 1;
+  --rail-w: 96px;             /* landscape dock rail */
+  --content-max: 1040px;      /* cards / page columns never stretch wider (1920 px screens) */
+  color-scheme: dark;
+}
+/* PN-31 light set (document.documentElement.dataset.ui = "light", set by core/theme.js). Text pairs >= 4.5:1 on
+   --bg / --surface / --surface-2 (contrast checked 2026-11-11). --guide banner keeps white text on green. */
+:root[data-ui="light"] {
+  --bg: #eef1f5;
+  --surface: #ffffff;
+  --surface-2: #e8ecf1;
+  --surface-3: #d3dae2;
+  --text: #10151b;
+  --text-2: #3a4550;
+  --text-3: #515c69;
+  --accent: #0955bb;
+  --accent-on: #ffffff;
+  --warn: #8a5300;
+  --danger: #b8221b;
+  --ok: #086a34;
+  --shadow: 0 6px 24px rgba(30, 45, 65, .18);
+  --line: #cfd6de;
+  --scrim: rgba(20, 30, 45, .35);
+  --scrim-2: rgba(20, 30, 45, .5);
+  --toast-bg: rgba(255, 255, 255, .96);
+  --kbd-bg: #dfe4ea;
+  --kbd-down: #b9c3ce;
+  --tile-a: #d4e5fb; --tile-b: #c3daf7;
+  --danger-bg: #fbe1df;
+  --danger-on: #ffffff;
+  --switch-off: #7a8694;
+  --hair: rgba(16, 21, 27, .11);
+  --rail-bg: rgba(16, 21, 27, .025);
+  --ico-l: 34%;
+  --ico-a: .16;
+  color-scheme: light;
+}
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+.kiosk, .kiosk * { cursor: none !important; }
+html, body { margin: 0; height: 100%; background: var(--bg); color: var(--text); font-family: var(--font);
+  overflow: hidden; user-select: none; -webkit-user-select: none; touch-action: manipulation;
+  overscroll-behavior: none; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+/* No page zoom, ever (2026-11-12: a pinch zoomed the kiosk 1.32x and cut off every edge). Lists still
+   pan (pan-x/pan-y); the map handles its own pinch on its canvas. Guard: tools/ui-layout-guard.mjs. */
+html { touch-action: pan-x pan-y; zoom: var(--ui-s); }
+/* the map draws at the screen's own pixels: zoomed back to 1 (MapLibre measures its container in its own px) */
+#map { zoom: var(--ui-inv); }
+button { font: inherit; color: inherit; border: 0; background: none; cursor: pointer; touch-action: manipulation; }
+button:disabled { opacity: .45; cursor: default; }
+button:focus-visible, input:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+svg.i { width: 32px; height: 32px; fill: currentColor; flex: none; }
+.num { font-variant-numeric: tabular-nums; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+
+/* ---------- shell: status bar / views / dock ---------- */
+#app { position: fixed; inset: 0; display: grid; grid-template-rows: var(--status-h) minmax(0, 1fr) var(--dock-h); }
+#status { display: flex; align-items: center; gap: 16px; padding: 0 18px; background: var(--bg);
+  font-size: 22px; color: var(--text-2); z-index: 30; }
+#status .clock { font-size: 34px; font-weight: 700; color: var(--text); letter-spacing: .01em; font-variant-numeric: tabular-nums; }
+#status .spacer { flex: 1; }
+#status .chip { display: flex; align-items: center; gap: 6px; }
+#status .chip svg.i { width: 28px; height: 28px; }
+#status .chip.ok { color: var(--ok); } #status .chip.warn { color: var(--warn); } #status .chip.off { color: var(--text-3); } #status .chip.dim { opacity: .55; }
+#status .chip.sim { color: var(--accent); }
+#views { position: relative; overflow: hidden; }
+/* inactive views must be visibility:hidden, not only transparent: Chromium routed wheel/touch scrolling
+   to the invisible map view stacked on top, so lists (Settings → Bluetooth) could not scroll (2026-11-11) */
+.view { position: absolute; inset: 0; opacity: 0; visibility: hidden; pointer-events: none;
+  transition: opacity .18s var(--ease), visibility 0s linear .18s; }
+.view.active { opacity: 1; visibility: visible; pointer-events: auto; transition: opacity .18s var(--ease), visibility 0s; }
+#home { overscroll-behavior: contain; touch-action: pan-y; }
+/* dock: the apps + Settings (gear, always last). Portrait: bottom bar, equal cells. Landscape: left rail, apps from
+   the top, Settings at the bottom (Android Auto-like). */
+#dock { display: flex; background: var(--surface); border-top: 1px solid var(--line); z-index: 30; }
+#dock button { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
+  font-size: 16px; color: var(--text-2); min-height: var(--tap); }
+/* active app = Material nav-rail indicator pill behind the icon (Android Auto / Google Maps driving look) + bold label */
+#dock button svg.i { width: 64px; height: 36px; padding: 4px 18px; border-radius: 18px; box-sizing: border-box; transition: background .15s var(--ease); }
+#dock button.active { color: var(--text); font-weight: 700; }
+#dock button.active svg.i { background: color-mix(in srgb, var(--accent) 24%, transparent); color: var(--accent); }
+#dock button:active svg.i { background: var(--surface-3); }
+
+/* ---------- home ---------- */
+#home { padding: 20px; display: flex; flex-direction: column; gap: 16px; overflow-y: auto; }
+#home h1 { margin: 6px 4px 0; font-size: 30px; font-weight: 700; }
+#home .sub { margin: 0 4px; color: var(--text-2); font-size: 20px; }
+.tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.tile { background: var(--surface); border-radius: var(--radius); padding: 22px; min-height: 150px; display: flex;
+  flex-direction: column; justify-content: space-between; text-align: left; transition: transform .12s var(--ease), background .12s; }
+.tile:active { transform: scale(.97); background: var(--surface-2); }
+.tile.big { grid-column: 1 / -1; min-height: 190px; background: linear-gradient(135deg, var(--tile-a), var(--tile-b)); }
+.tile svg.i { width: 48px; height: 48px; color: var(--accent); }
+.tile .t { font-size: 26px; font-weight: 700; }
+.tile .d { font-size: 18px; color: var(--text-2); }
+.tile.soon .t, .tile.soon svg.i { color: var(--text-3); }
+.list { display: flex; flex-direction: column; gap: 10px; }
+.row { display: flex; align-items: center; gap: 16px; background: var(--surface); border-radius: var(--radius-sm);
+  padding: 14px 18px; min-height: var(--tap); text-align: left; width: 100%; }
+.row:active { background: var(--surface-2); }
+.row svg.i { color: var(--text-2); }
+.row .main { flex: 1; min-width: 0; }
+.row .n { font-size: 22px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.row .c { font-size: 17px; color: var(--text-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.section-title { font-size: 18px; color: var(--text-3); margin: 8px 4px 0; text-transform: uppercase; letter-spacing: .06em; }
+
+/* landscape: dock moves to the left edge, like Android Auto */
+@media (orientation: landscape) {
+  #app { grid-template-columns: var(--rail-w) minmax(0, 1fr); grid-template-rows: var(--status-h) minmax(0, 1fr); }
+  #status { grid-column: 1 / -1; }
+  #dock { grid-row: 2; grid-column: 1; flex-direction: column; border-top: 0; border-right: 1px solid var(--line); padding: 8px 0; min-height: 0; }
+  /* cells share the rail height (max 112 px): a short screen or a 6th entry (Places, 2026-11-22) never pushes Settings off */
+  #dock { overflow-y: auto; overscroll-behavior: contain; }
+  #dock button { flex: 0 1 112px; height: auto; min-height: 64px; }
+  #dock .dock-set { margin-top: auto; }
+  #views { grid-row: 2; grid-column: 2; }
+  .tiles { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* on-screen keyboard: features/core/keyboard.css (PN-KBD-03) */
+
+/* ---------- settings (2026-11-22, category rail) ----------
+   #settings = category rail (.st-rail) + main (.st-main: title + scrolling pane of cards). Landscape: rail 288 px with
+   labels; portrait: icons only. Cards: hairline border, header row with a lead icon and a separator, one column, so
+   nothing can be pushed off the right edge (the old 2-column grid clipped the GPS card and the voice buttons). */
+#settings { display: flex; background: var(--bg); }
+#settings .st-rail { width: 288px; flex: none; display: flex; flex-direction: column; border-right: 1px solid var(--hair); background: var(--rail-bg); min-height: 0; }
+#settings .st-rail-head { height: 76px; flex: none; display: flex; align-items: center; gap: 12px; padding: 0 14px; }
+#settings .st-rail-head h1 { margin: 0; font-size: 28px; font-weight: 700; letter-spacing: -.01em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#settings .back { width: 56px; height: 56px; flex: none; border-radius: 50%; display: grid; place-items: center; background: var(--surface-2); }
+#settings .back:active { background: var(--surface-3); }
+#settings .st-nav { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; touch-action: pan-y; display: flex; flex-direction: column; gap: 2px; padding: 0 0 12px; }
+#settings .st-nav button { display: flex; align-items: center; gap: 14px; flex: none; min-height: 62px; margin: 0 10px; padding: 0 14px 0 10px;
+  border-radius: 20px; color: var(--text-2); font-size: 20px; text-align: left; transition: background .15s var(--ease), color .15s var(--ease); }
+#settings .st-nav button.on { background: var(--surface-2); color: var(--text); font-weight: 700; }
+#settings .st-nav button:active .st-ico { transform: scale(.92); }
+#settings .st-nav-t { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#settings .st-ico { width: 44px; height: 44px; flex: none; display: grid; place-items: center; border-radius: 14px;
+  background: hsl(var(--hue) 75% 55% / var(--ico-a)); color: hsl(var(--hue) 80% var(--ico-l)); transition: transform .12s var(--ease), background .15s; }
+#settings .st-ico svg.i { width: 26px; height: 26px; }
+#settings .st-nav button.on .st-ico { background: hsl(var(--hue) 75% 58%); color: #08101c; box-shadow: 0 4px 14px hsl(var(--hue) 80% 40% / .35); }
+:root[data-ui="light"] #settings .st-nav button.on .st-ico { background: hsl(var(--hue) 70% 40%); color: #fff; }
+#settings .st-main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+#settings .st-head { height: 76px; flex: none; display: flex; align-items: center; padding: 0 28px; }
+#settings .st-title { margin: 0; font-size: 28px; font-weight: 700; letter-spacing: -.01em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#settings .st-pane { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; touch-action: pan-y;
+  padding: 2px 28px 28px; display: flex; flex-direction: column; gap: 18px; }
+#settings .st-pane > .st-off { display: none !important; }
+#settings .st-pane > *, .page .pg-body > * { width: 100%; max-width: var(--content-max); }
+:is(#settings, .page) .card { flex: none; min-width: 0; background: var(--surface); border: 1px solid var(--hair); border-radius: 22px; padding: 0 20px 18px; gap: 14px; }
+:is(#settings, .page) .card > * { min-width: 0; }
+:is(#settings, .page) .card-h { min-height: 72px; margin: 0 -20px; padding: 6px 20px; box-shadow: inset 0 -1px 0 var(--hair); }
+:is(#settings, .page) .card-h .t { font-size: 22px; }
+:is(#settings, .page) .card-h > svg.i:first-child { width: 44px; height: 44px; padding: 9px; border-radius: 14px; background: var(--surface-2); color: var(--text-2); }
+:is(#settings, .page) .card-h.upd-sub { box-shadow: none; min-height: 48px; margin-top: 4px; }
+:is(#settings, .page) .switch { width: 96px; height: 56px; border-radius: 28px; }   /* >= 56 px touch target in Settings */
+:is(#settings, .page) .switch span { top: 6px; left: 6px; width: 44px; height: 44px; }
+:is(#settings, .page) .switch[aria-checked="true"] span { transform: translateX(40px); }
+:is(#settings, .page) .seg { background: var(--surface-2); border-radius: 18px; padding: 5px; gap: 5px; }
+:is(#settings, .page) .seg button { min-height: 60px; background: transparent; border-radius: 14px; padding: 4px 8px; line-height: 1.2; }
+:is(#settings, .page) .seg button.on { background: var(--accent); color: var(--accent-on); }
+:is(#settings, .page) .seg:has(> .btn) { background: none; padding: 0; gap: 10px; }
+.card { background: var(--surface); border-radius: var(--radius); padding: 18px; display: flex; flex-direction: column; gap: 12px; }
+.card-h { display: flex; align-items: center; gap: 14px; min-height: 48px; }
+.card-h .t { font-size: 24px; font-weight: 700; flex: 1; min-width: 0; }
+.card-h .c { font-size: 18px; color: var(--text-2); max-width: 55%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.card .row { background: var(--surface-2); }
+.row .acts { display: flex; gap: 8px; }
+.row .acts .btn { min-height: 60px; padding: 0 18px; font-size: 19px; }
+.row .st { font-size: 17px; color: var(--text-2); }
+.row .st.on { color: var(--ok); } .row .st.err { color: var(--warn); }
+.btn.wide { width: 100%; }
+.btn.sq { width: var(--tap); padding: 0; flex: none; }
+.btn.danger { background: var(--danger-bg); color: var(--danger); }
+.hint { font-size: 18px; color: var(--text-2); padding: 0 4px; }
+.switch { width: 84px; height: 48px; border-radius: 24px; background: var(--switch-off); position: relative; flex: none; transition: background .15s; }
+.switch span { position: absolute; top: 5px; left: 5px; width: 38px; height: 38px; border-radius: 50%; background: #fff; transition: transform .15s var(--ease); }
+.switch[aria-checked="true"] { background: var(--accent); }
+.switch[aria-checked="true"] span { transform: translateX(36px); }
+.vol { display: flex; align-items: center; gap: 14px; }
+.vol .bar { flex: 1; height: 16px; border-radius: 8px; background: var(--surface-3); overflow: hidden; }
+.vol .bar div { height: 100%; width: 0; background: var(--accent); transition: width .15s; }
+.vol .pct { width: 64px; text-align: right; font-size: 22px; }
+.seg { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.seg button { min-height: var(--tap); border-radius: var(--radius-sm); background: var(--surface-2); font-size: 20px; }
+.seg button.on { background: var(--accent); color: var(--accent-on); font-weight: 700; }
+.qrow { display: flex; gap: 10px; flex-wrap: wrap; }
+.qrow .btn { min-height: 60px; font-size: 19px; padding: 0 18px; }
+.qrow .btn.on { background: var(--accent); color: var(--accent-on); }
+.about { font-size: 16px; color: var(--text-3); white-space: pre-line; padding: 0 4px 12px; }
+/* rail pages (Trip, GPS; 2026-11-22): title + one scrolling column of cards in the Settings card style */
+.view.page { display: flex; flex-direction: column; background: var(--bg); }
+.page .pg-head { height: 76px; flex: none; display: flex; align-items: center; padding: 0 28px; }
+.page .pg-head h1 { margin: 0; font-size: 28px; font-weight: 700; letter-spacing: -.01em; }
+.page .pg-body { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; touch-action: pan-y;
+  padding: 2px 28px 28px; display: flex; flex-direction: column; gap: 18px; }
+@media (orientation: portrait) { .page .pg-head { padding: 0 20px; } .page .pg-body { padding: 2px 16px 24px; } }
+/* portrait (720 px wide): the rail keeps only the icon tiles; the pane title names the category */
+@media (orientation: portrait) {
+  #settings .st-rail { width: 92px; }
+  #settings .st-rail-head { justify-content: center; padding: 0; }
+  #settings .st-rail-head h1, #settings .st-nav-t { display: none; }
+  #settings .st-nav button { margin: 0 8px; padding: 0; justify-content: center; min-height: 68px; }
+  #settings .st-nav button.on { background: transparent; }
+  #settings .st-head { padding: 0 20px; }
+  #settings .st-pane { padding: 2px 16px 24px; }
+  :is(#settings, .page) .card { padding: 0 16px 16px; }
+  :is(#settings, .page) .card-h { margin: 0 -16px; padding: 6px 16px; }
+}
+/* touch UI: no scrollbars (scrolling stays) */
+* { scrollbar-width: none; } *::-webkit-scrollbar { display: none; }
+
+/* ---------- status bar extras (information only since 2026-11-22: no chevron, no pull-down) ---------- */
+#status { touch-action: none; }
+.chip.np { max-width: 34%; background: var(--surface-2); border-radius: 18px; padding: 4px 12px 4px 8px; color: var(--text); font-size: 18px; }
+.chip.np span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#status .chip[hidden] { display: none; }
+#status .chip.temp { font-size: 17px; }   /* #status .chip display:flex beat the hidden attribute: empty now-playing pill */
+
+/* ---------- screen sizes (2026-11-22): data-fit on <html>, set by core/scale.js in layout px (after the UI scale) ----------
+   short: layout height < 640 (800x480, 1024x600 at "Larger"); tiny: < 470 (480x320, 3.5"); narrow: width < 760 (480x800
+   portrait); wide: width > 1400. Features add their own [data-fit~=…] rules next to their CSS; tokens below are global. */
+:root[data-fit~="short"] { --gap: 10px; }
+:root[data-fit~="short"] #settings .st-rail-head, :root[data-fit~="short"] #settings .st-head, :root[data-fit~="short"] .page .pg-head { height: 64px; }
+:root[data-fit~="short"] #settings .st-nav button { min-height: 56px; }
+:root[data-fit~="short"] #settings .st-pane, :root[data-fit~="short"] .page .pg-body { gap: 14px; }
+/* tiny (3.5" class): map first. Compact status bar (clock stays bold and >= 20 px on the glass), icon-only rails. */
+:root[data-fit~="tiny"] { --status-h: 48px; --rail-w: 80px; --dock-h: 72px; }
+:root[data-fit~="tiny"] #status { gap: 10px; padding: 0 12px; font-size: 19px; }
+:root[data-fit~="tiny"] #status .clock { font-size: 30px; }
+:root[data-fit~="tiny"] #status .chip svg.i { width: 26px; height: 26px; }
+:root[data-fit~="tiny"] #dock button { min-height: 56px; }
+:root[data-fit~="tiny"] #dock button > span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }   /* still the accessible name */
+:root[data-fit~="tiny"] #dock button svg.i { width: 56px; padding: 4px 14px; }
+/* Settings category rail: icons only when the room is short or narrow (as portrait always was) */
+:root:is([data-fit~="tiny"], [data-fit~="narrow"]) #settings .st-rail { width: 92px; }
+:root:is([data-fit~="tiny"], [data-fit~="narrow"]) #settings .st-rail-head { justify-content: center; padding: 0; }
+:root:is([data-fit~="tiny"], [data-fit~="narrow"]) #settings .st-rail-head h1,
+:root:is([data-fit~="tiny"], [data-fit~="narrow"]) #settings .st-nav-t { display: none; }
+:root:is([data-fit~="tiny"], [data-fit~="narrow"]) #settings .st-nav button { margin: 0 8px; padding: 0; justify-content: center; }
+:root:is([data-fit~="tiny"], [data-fit~="narrow"]) #settings .st-nav button.on { background: transparent; }
+:root:is([data-fit~="tiny"], [data-fit~="narrow"]) #settings .st-head,
+:root:is([data-fit~="tiny"], [data-fit~="narrow"]) .page .pg-head { padding: 0 18px; }
+:root:is([data-fit~="tiny"], [data-fit~="narrow"]) #settings .st-pane,
+:root:is([data-fit~="tiny"], [data-fit~="narrow"]) .page .pg-body { padding: 2px 14px 20px; }
+:root[data-fit~="tiny"] #settings .st-rail-head, :root[data-fit~="tiny"] #settings .st-head, :root[data-fit~="tiny"] .page .pg-head { height: 56px; }
+:root[data-fit~="tiny"] #settings .st-title, :root[data-fit~="tiny"] .page .pg-head h1 { font-size: 24px; }

@@ -1,0 +1,83 @@
+#!/usr/bin/env python3
+"""Fake nmcli for tests and local UI screenshots (NMCLI=tests/fake-nmcli). State lives in $FAKE_NM_STATE (json).
+Right password for secured networks: "correctpw1". Records argv (never stdin) in $FAKE_NM_STATE.calls."""
+import json, os, sys, uuid
+
+SP = os.environ.get("FAKE_NM_STATE", "/tmp/fake-nm.json")
+INIT = {"radio": True, "connected": "Home 5G", "profiles": [
+    {"name": "Home 5G", "uuid": "11111111-1111-1111-1111-111111111111", "type": "802-11-wireless"},
+    {"name": "Old Cafe", "uuid": "22222222-2222-2222-2222-222222222222", "type": "802-11-wireless"},
+    {"name": "Wired", "uuid": "33333333-3333-3333-3333-333333333333", "type": "802-3-ethernet"}]}
+NETS = [("Home 5G", 82, "WPA2"), ("Pixel hotspot", 64, "WPA2 WPA3"), ("Caf:e: Free", 55, ""), ("Neighbour:2G", 41, "WPA2"),
+        ("Corp", 38, "WPA2 802.1X"), ("Corp", 20, "WPA2 802.1X"), ("", 30, "WPA2")]
+
+
+def load():
+    try:
+        return json.load(open(SP))
+    except OSError:
+        return json.loads(json.dumps(INIT))
+
+
+def save(s):
+    json.dump(s, open(SP, "w"))
+
+
+def esc(x):
+    return x.replace("\\", "\\\\").replace(":", "\\:")
+
+
+a = sys.argv[1:]
+open(SP + ".calls", "a").write(" ".join(a) + "\n")
+s = load()
+ask = "--ask" in a
+a = [x for x in a if x != "--ask"]
+if a[:1] == ["--version"]:
+    print("nmcli tool, version fake")
+elif a[:4] == ["-t", "-f", "DEVICE,TYPE,STATE", "dev"]:
+    st = "unavailable" if not s["radio"] else ("connected" if s["connected"] else "disconnected")
+    print("eth0:ethernet:connected\nwlan0:wifi:" + st + "\nlo:loopback:unmanaged")
+elif a[:2] == ["radio", "wifi"]:
+    if len(a) == 3:
+        s["radio"] = a[2] == "on"
+        if not s["radio"]:
+            s["connected"] = ""
+        save(s)
+    else:
+        print("enabled" if s["radio"] else "disabled")
+elif a[:3] == ["-t", "-f", "NAME,UUID,TYPE"]:
+    for p in s["profiles"]:
+        print(esc(p["name"]) + ":" + p["uuid"] + ":" + p["type"])
+elif a[:3] == ["-t", "-f", "IN-USE,SSID,SIGNAL,SECURITY"]:
+    for ssid, sig, sec in NETS:
+        print("%s:%s:%d:%s" % ("*" if ssid == s["connected"] and ssid else " ", esc(ssid), sig, sec or "--"))
+elif a[:3] == ["-t", "-f", "GENERAL.CONNECTION,IP4.ADDRESS"]:
+    print("GENERAL.CONNECTION:" + (esc(s["connected"]) or "--"))
+    if s["connected"]:
+        print("IP4.ADDRESS[1]:192.168.1.23/24")
+elif a[:3] == ["dev", "wifi", "rescan"]:
+    pass
+elif a[:3] == ["dev", "wifi", "connect"]:
+    ssid = a[3]
+    pw = sys.stdin.readline().rstrip("\n") if ask else ""
+    secured = any(n[0] == ssid and n[2] for n in NETS)
+    if ssid not in [n[0] for n in NETS]:
+        sys.stderr.write("Error: No network with SSID '%s' found.\n" % ssid); sys.exit(10)
+    if secured and pw != "correctpw1":
+        sys.stderr.write("Error: Connection activation failed: (7) Secrets were required, but not provided.\n")
+        s["profiles"].append({"name": ssid, "uuid": str(uuid.uuid4()), "type": "802-11-wireless"}); save(s)
+        sys.exit(4)
+    s["profiles"].append({"name": ssid, "uuid": str(uuid.uuid4()), "type": "802-11-wireless"})
+    s["connected"] = ssid; save(s)
+elif a[:3] == ["con", "up", "uuid"]:
+    p = [p for p in s["profiles"] if p["uuid"] == a[3]]
+    if not p:
+        sys.exit(10)
+    s["connected"] = p[0]["name"]; save(s)
+elif a[:3] == ["con", "delete", "uuid"]:
+    s["profiles"] = [p for p in s["profiles"] if p["uuid"] != a[3]]
+    if s["connected"] and not any(p["name"] == s["connected"] for p in s["profiles"]):
+        s["connected"] = ""
+    save(s)
+else:
+    sys.stderr.write("fake nmcli: unsupported %r\n" % a); sys.exit(2)

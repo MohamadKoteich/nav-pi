@@ -1,0 +1,41 @@
+/* media feature: sources, library browser, player */
+#media { display: flex; flex-direction: column; padding: 16px 16px 0; gap: 12px; }
+.srcs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; flex: none; }
+.srcs button { min-height: var(--tap); border-radius: var(--radius-sm); background: var(--surface); display: flex; align-items: center;
+  justify-content: center; gap: 8px; font-size: 19px; color: var(--text-2); }
+.srcs button.on { background: var(--accent); color: var(--accent-on); font-weight: 700; }
+.m-body { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; padding-bottom: 12px; overscroll-behavior: contain; touch-action: pan-y; }
+.m-body .row .count { font-size: 17px; color: var(--text-3); }
+.m-body .row.playing { outline: 3px solid var(--accent); }
+.m-body .card { gap: 14px; }
+.m-body .big-msg { font-size: 22px; color: var(--text-2); line-height: 1.4; }
+.player { flex: none; background: var(--surface); border-radius: var(--radius) var(--radius) 0 0; padding: 14px 18px 16px; display: grid; gap: 10px; box-shadow: var(--shadow); }
+.p-title { font-size: 24px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.p-sub { font-size: 18px; color: var(--text-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.p-seek { display: flex; align-items: center; gap: 12px; font-size: 17px; color: var(--text-2); }
+.p-bar { flex: 1; height: 28px; display: flex; align-items: center; cursor: pointer; }
+.p-bar::before { content: ""; position: absolute; }
+.p-bar { background: linear-gradient(var(--surface-3), var(--surface-3)) center / 100% 10px no-repeat; border-radius: 5px; position: relative; }
+.p-bar #p-fill { height: 10px; border-radius: 5px; background: var(--accent); width: 0; }
+.p-ctl { display: flex; justify-content: center; align-items: center; gap: 18px; }
+.pc { width: var(--tap); height: var(--tap); border-radius: 50%; background: var(--surface-2); display: grid; place-items: center; }
+.pc.big { width: 92px; height: 92px; background: var(--accent); color: var(--accent-on); }
+.pc.big svg.i { width: 44px; height: 44px; }
+.pc:active { filter: brightness(1.2); }
+.pc[hidden] { display: none; }
+.p-opts { display: flex; justify-content: center; gap: 12px; }
+.p-opts .btn { min-height: 56px; font-size: 19px; padding: 0 18px; }
+.p-opts[hidden] { display: none; }
+@media (orientation: landscape) {
+  #media { display: grid; grid-template-columns: minmax(0, 1fr) 460px; grid-template-rows: auto 1fr; padding: 14px; gap: 12px; }
+  .srcs { grid-column: 1 / -1; }
+  .m-body { grid-column: 1; grid-row: 2; min-height: 0; }
+  .player { grid-column: 2; grid-row: 2; min-width: 0; border-radius: var(--radius); align-content: center; }
+  .player[hidden] { display: grid; visibility: hidden; }
+  .p-ctl { gap: 10px; }   /* 4 x 72 + 92 + gaps must fit the 460 px column (was 36 px too wide) */
+}
+/* narrow / tiny screens (core/scale.js data-fit): one column like portrait, source buttons icons only */
+:root[data-fit~="narrow"] #media { display: flex; flex-direction: column; padding: 10px 10px 0; gap: 10px; }
+:root[data-fit~="narrow"] .player { border-radius: var(--radius) var(--radius) 0 0; }
+:root[data-fit~="narrow"] .player[hidden] { display: none; }
+:root[data-fit~="tiny"] .srcs button { font-size: 0; min-height: 60px; }

@@ -1,0 +1,25 @@
+{
+  "id": "dashboard",
+  "name": "Split-screen dashboard (landscape): map + clock, trip info, now playing",
+  "requires": [
+    "core",
+    "nav"
+  ],
+  "status": "stable",
+  "app": {
+    "css": [
+      "dashboard.css"
+    ],
+    "js": [
+      "dashboard.js"
+    ]
+  },
+  "fragments": {
+    "view": "view.html",
+    "settings": "settings.html"
+  },
+  "pi": {
+    "packages": [],
+    "services": []
+  }
+}

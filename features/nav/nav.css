@@ -1,0 +1,263 @@
+/* nav feature: map, search, route preview, guidance banner, trip bar. */
+/* ---------- maps ---------- */
+#map { position: absolute; inset: 0; background: #17212b; }
+.fab { position: absolute; width: var(--tap); height: var(--tap); border-radius: 50%; background: var(--surface-2);
+  box-shadow: var(--shadow); display: grid; place-items: center; z-index: 10; transition: transform .12s var(--ease); }
+.fab:active { transform: scale(.94); }
+/* Map buttons stack themselves (2026-11-12: two features placed buttons on the same spot and one could not be tapped). */
+#fabs { position: absolute; right: 16px; bottom: 44px; z-index: 10; display: flex; flex-direction: column-reverse; gap: 16px; align-items: center; }
+#fabs .fab { position: relative; }
+#btn-theme { right: 16px; top: 108px; width: 60px; height: 60px; }
+
+#searchbar { position: absolute; left: 16px; right: 16px; top: 16px; height: var(--tap); background: var(--surface-2);
+  border-radius: 36px; box-shadow: var(--shadow); display: flex; align-items: center; gap: 12px; padding: 0 18px; z-index: 12; }
+#searchbar input { flex: 1; min-width: 0; height: 100%; background: none; border: 0; color: var(--text); font: inherit;
+  font-size: 24px; outline: none; }
+#searchbar input::placeholder { color: var(--text-3); }
+#q-clear:not([hidden]) { flex: none; width: 56px; height: 56px; margin-right: -10px; display: grid; place-items: center; border-radius: 50%; }   /* >= 44 px on every screen */
+#search-results { position: absolute; left: 16px; right: 16px; top: 100px; bottom: 16px; overflow-y: auto; z-index: 12;
+  display: none; flex-direction: column; gap: 10px; }
+#search-results.open { display: flex; }
+#search-results .empty { color: var(--text-2); font-size: 20px; padding: 16px; background: var(--surface); border-radius: var(--radius-sm); }
+
+/* route preview sheet */
+#sheet { position: absolute; left: 0; right: 0; bottom: 0; background: var(--surface); border-radius: 24px 24px 0 0;
+  padding: 20px 20px 22px; z-index: 14; box-shadow: var(--shadow); transform: translateY(110%);
+  visibility: hidden; transition: transform .22s var(--ease), visibility 0s linear .22s; }   /* closed = really gone (no sliver under the dock, no taps) */
+#sheet.open { transform: none; visibility: visible; transition: transform .22s var(--ease), visibility 0s; }
+#sheet .dest { font-size: 26px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#sheet .ctx { font-size: 18px; color: var(--text-2); margin-top: 2px; }
+#sheet .facts { display: flex; gap: 22px; margin: 14px 0 18px; font-size: 22px; color: var(--text-2); }
+#sheet .facts b { color: var(--ok); font-size: 30px; }
+#sheet .actions { display: flex; gap: 12px; }
+.btn { min-height: var(--tap); border-radius: 36px; padding: 0 26px; font-size: 22px; font-weight: 700; display: flex;
+  align-items: center; justify-content: center; gap: 10px; background: var(--surface-3); }
+.btn:active { filter: brightness(1.15); }
+.btn.primary { background: var(--accent); color: var(--accent-on); flex: 1; }
+.btn.ghost { background: var(--surface-2); }
+
+/* guidance */
+#banner { position: absolute; left: 12px; right: 12px; top: 12px; background: var(--guide); border-radius: var(--radius);
+  box-shadow: var(--shadow); z-index: 13; display: none; color: #fff; overflow: hidden; }
+#banner.open { display: block; }
+#banner .now { display: flex; align-items: center; gap: 16px; padding: 16px 18px; }
+#banner .arrow { width: 84px; height: 84px; flex: none; }
+#banner .arrow svg { width: 100%; height: 100%; fill: #fff; }
+#banner .dist { font-size: 46px; font-weight: 800; line-height: 1; }
+#banner .street { font-size: 26px; font-weight: 600; margin-top: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#banner .then { display: none; align-items: center; gap: 10px; padding: 8px 18px; background: var(--guide-2); font-size: 20px; }
+#banner .then.on { display: flex; }
+#banner .then svg { width: 30px; height: 30px; fill: #fff; }
+#tripbar { position: absolute; left: 0; right: 0; bottom: 0; background: var(--surface); z-index: 13; display: none;
+  align-items: center; gap: 14px; padding: 14px 16px; border-radius: 24px 24px 0 0; box-shadow: var(--shadow); }
+#tripbar.open { display: flex; }
+#tripbar .eta { flex: 1; }
+#tripbar .eta .a { font-size: 34px; font-weight: 800; color: var(--ok); }
+#tripbar .eta .r { font-size: 20px; color: var(--text-2); }
+/* speed cluster (Waze-like, 2026-11-22): big current speed + round limit sign, bottom-left above the ETA bar */
+#speedo { position: absolute; left: 12px; bottom: 116px; z-index: 13; display: none; align-items: center; gap: 10px; pointer-events: none; }
+#tripbar.open ~ #speedo { display: flex; }
+#speedo .speed { width: 96px; height: 96px; border-radius: 50%; background: var(--surface); box-shadow: var(--shadow); display: grid;
+  place-content: center; text-align: center; font-size: 38px; font-weight: 800; line-height: 1; flex: none; transition: background .2s, color .2s; }
+#speedo .speed small { display: block; font-size: 14px; font-weight: 600; color: var(--text-2); margin-top: 2px; }
+#speedo .limit { width: 84px; height: 84px; border-radius: 50%; background: #fff; border: 10px solid #d8232a; color: #111; box-sizing: border-box;
+  display: grid; place-items: center; font-size: 34px; font-weight: 800; line-height: 1; flex: none; box-shadow: var(--shadow); }
+#speedo .limit[hidden] { display: none; }
+#speedo .limit.l3 { font-size: 27px; }
+#speedo .limit.over { animation: limit-pulse 1s ease-in-out infinite; }
+#speedo .speed.over { background: var(--danger); color: #fff; }
+#speedo .speed.over small { color: #fff; }
+@keyframes limit-pulse { 50% { box-shadow: 0 0 0 6px rgba(216,35,42,.45); } }
+@media (prefers-reduced-motion: reduce) { #speedo .limit.over { animation: none; } }
+.seg.seg3 { grid-template-columns: 1fr 1fr 1fr; }
+.dim { opacity: .45; }
+#tripbar .stop { width: var(--tap); height: var(--tap); border-radius: 50%; background: var(--danger); color: #fff; display: grid; place-items: center; }
+#toast { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); background: var(--toast-bg);
+  padding: 18px 26px; border-radius: var(--radius-sm); font-size: 22px; z-index: 40; display: none; text-align: center; max-width: 85%; box-shadow: var(--shadow); }
+#toast.open { display: block; }
+.navigating #searchbar, .navigating #btn-theme { display: none; }
+.navigating #fabs { bottom: 124px; }
+#pick { position: absolute; left: 0; right: 0; bottom: 0; background: var(--surface); border-radius: 24px 24px 0 0;
+  padding: 18px 20px 22px; z-index: 15; box-shadow: var(--shadow); display: none; }
+#pick.open { display: block; }
+#pick .ctx { font-size: 20px; color: var(--text-2); margin-bottom: 14px; }
+#pick .actions { display: flex; gap: 12px; }
+.startpin svg { width: 34px; height: 34px; }
+
+/* vehicle marker */
+.puck { width: 44px; height: 44px; }
+.puck svg { width: 100%; height: 100%; filter: drop-shadow(0 2px 4px rgba(0,0,0,.6)); }
+
+@media (orientation: landscape) {
+  #banner { right: auto; width: min(460px, 55%); }
+  #tripbar { right: auto; width: min(460px, 55%); left: 12px; bottom: 12px; border-radius: var(--radius); }
+  #speedo { left: 24px; bottom: 128px; }
+  #sheet { right: auto; width: min(480px, 60%); left: 12px; bottom: 12px; border-radius: var(--radius); }
+}
+/* tiny landscape screens (core/scale.js data-fit, 480x320 class): the speed cluster moves beside the ETA bar so it never
+   covers the turn card, the turn card is compact, the route sheet uses the width and keeps Go in view while it scrolls */
+@media (orientation: landscape) {
+  :root[data-fit~="tiny"] #speedo { bottom: 12px; }
+  :root[data-fit~="tiny"] .navigating #fabs { bottom: 44px; }
+  :root[data-fit~="tiny"] #banner, :root[data-fit~="tiny"] #tripbar { width: min(420px, 60%); }
+  :root[data-fit~="tiny"] #speedo { left: calc(24px + min(420px, 60%)); }
+  :root[data-fit~="tiny"] #speedo .speed { width: 84px; height: 84px; }
+  :root[data-fit~="tiny"] #speedo .limit { width: 72px; height: 72px; border-width: 8px; }
+  :root[data-fit~="tiny"] #sheet { width: calc(100% - 24px); }
+}
+:root[data-fit~="tiny"] #banner .now { padding: 10px 14px; gap: 12px; }
+:root[data-fit~="tiny"] #banner .arrow { width: 64px; height: 64px; }
+:root[data-fit~="tiny"] #banner .dist { font-size: 38px; }
+:root[data-fit~="tiny"] #banner .street { font-size: 22px; margin-top: 2px; }
+:root[data-fit~="tiny"] #banner .then.on { padding: 6px 14px; font-size: 18px; }
+:root[data-fit~="tiny"] #sheet > .actions { position: sticky; bottom: -18px; margin: 0 -16px -18px; padding: 10px 16px 14px; background: var(--surface); z-index: 1; }
+
+/* route start ("From") row in the preview sheet; tap = choose another start */
+#sheet .from { display: flex; gap: 10px; align-items: center; margin-bottom: 10px; }
+#sheet .from-btn { flex: 1; min-width: 0; display: flex; align-items: center; gap: 10px; min-height: 56px; padding: 0 14px;
+  background: var(--surface-2); border-radius: var(--radius-sm); font-size: 19px; color: var(--text); text-align: left; }
+#sheet .from-btn .dot { width: 14px; height: 14px; border-radius: 50%; border: 3px solid #2fbf71; flex: none; }
+#sheet .from-btn .lbl { color: var(--text-3); flex: none; }
+#sheet .from-btn .nm { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#sheet .swap, .ico { width: 56px; height: 56px; border-radius: var(--radius-sm); background: var(--surface-2); color: var(--text-2);
+  display: grid; place-items: center; flex: none; }
+.ico.on { color: var(--accent); }
+#sheet .destrow { display: flex; gap: 10px; align-items: center; }
+#sheet .destrow .main { flex: 1; min-width: 0; }
+
+/* PN-33 route options + PN-34 save a place: panels at the top, clear of the on-screen keyboard */
+.navpanel { position: absolute; left: 16px; right: 16px; top: 16px; z-index: 30; background: var(--surface); border-radius: var(--radius);
+  box-shadow: var(--shadow); padding: 18px; display: none; flex-direction: column; gap: 12px; max-height: calc(100% - 32px); overflow-y: auto; }
+.navpanel.open { display: flex; }
+.navpanel [hidden] { display: none !important; }
+.navpanel .ttl { font-size: 22px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.navpanel .actions { display: flex; gap: 12px; }
+.navpanel .actions .btn:not(.sq):not(.primary) { flex: 1; }
+.navpanel .pf-in { display: flex; gap: 10px; }
+.navpanel input { flex: 1; min-width: 0; height: 56px; border: 0; border-radius: var(--radius-sm); background: var(--surface-2);
+  color: var(--text); font: inherit; font-size: 22px; padding: 0 14px; outline: none; }
+.navpanel .ro-list { display: flex; flex-direction: column; gap: 8px; }
+.navpanel .tog { background: var(--surface-2); min-height: 56px; padding: 8px 16px; font-size: 20px; }
+#search-results .row .ico { background: var(--surface-2); }
+@media (orientation: landscape) {
+  .navpanel { right: auto; width: min(620px, calc(100% - 32px)); top: 10px; padding: 14px 16px; gap: 10px; }
+}
+
+/* PN-35 route choices, PN-37 stops, PN-39 parked car */
+#sheet { max-height: calc(100% - 110px); overflow-y: auto; overscroll-behavior: contain; }
+#sheet [hidden] { display: none !important; }
+#sheet .alts { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
+#sheet .alt { display: flex; align-items: baseline; gap: 14px; min-height: 56px; padding: 0 16px; border-radius: var(--radius-sm);
+  background: var(--surface-2); color: var(--text-2); font-size: 19px; text-align: left; border: 2px solid transparent; }
+#sheet .alt b { color: var(--text); font-size: 22px; flex: none; align-self: center; }
+#sheet .alt .d { flex: none; align-self: center; }
+#sheet .alt .via { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; align-self: center; }
+#sheet .alt[aria-checked="true"] { border-color: var(--accent); }
+#sheet .alt[aria-checked="true"] b { color: var(--ok); }
+#sheet .alts:not([hidden]) + .facts { margin-top: 10px; }
+#sheet .stops { display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px; }
+#sheet .stop { display: flex; align-items: center; gap: 8px; }
+#sheet .stop .no { width: 28px; height: 28px; border-radius: 50%; background: #f2a516; color: #111; font-weight: 800; font-size: 16px;
+  display: grid; place-items: center; flex: none; }
+#sheet .stop .nm { flex: 1; min-width: 0; font-size: 20px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#sheet .stop .ico:disabled { opacity: .35; }
+#sheet.busy .stops .ico, #sheet.busy .alt { pointer-events: none; opacity: .5; }
+#pick [hidden] { display: none !important; }
+#pick .actions.sub { margin-top: 12px; }
+#pick .actions.sub .btn { flex: 1; }
+.stoppin { width: 30px; height: 30px; border-radius: 50%; background: #f2a516; color: #111; border: 3px solid #fff; box-sizing: border-box;
+  display: grid; place-items: center; font: 800 15px/1 system-ui, sans-serif; box-shadow: 0 2px 4px rgba(0,0,0,.5); }
+.stoppin.done { opacity: .45; }
+.parkpin { width: 44px; height: 44px; border-radius: 10px; background: #1f6fd1; color: #fff; border: 3px solid #fff; display: grid;
+  place-items: center; box-shadow: 0 2px 4px rgba(0,0,0,.5); padding: 0; }
+.parkpin svg.i { width: 26px; height: 26px; fill: #fff; }
+#search-results .row.park svg.i:first-child { color: #4c9dff; }
+#search-results .row.park .back { min-height: 56px; padding: 0 16px; font-size: 19px; flex: none; }
+@media (orientation: landscape) {
+  #sheet { max-height: calc(100% - 24px); padding: 16px 16px 18px; }
+  #sheet .facts { margin: 10px 0 12px; }
+}
+
+/* PN-36 lane arrows: a row under the next maneuver; lanes to use bright, the others dim (shape + opacity, not colour only) */
+#banner .lanes { display: none; align-items: flex-end; justify-content: center; gap: 0; padding: 8px 14px 10px; background: var(--guide-2); }
+#banner .lanes.on { display: flex; }
+#banner .lanes svg.lane { width: 44px; height: 55px; flex: none; fill: none; stroke: #fff; stroke-width: 3.2; stroke-linecap: round; stroke-linejoin: round; }
+#banner .lanes svg.lane polygon { fill: #fff; stroke: none; }
+#banner .lanes svg.lane .off { opacity: .32; }
+#banner .lanes svg.lane.ok { border-bottom: 4px solid #fff; border-radius: 2px; }
+#banner .lanes svg.lane:not(.ok) { border-bottom: 4px solid transparent; }
+#banner .lanes .sep { width: 2px; height: 34px; margin: 0 4px 10px; flex: none;
+  background: repeating-linear-gradient(to bottom, rgba(255,255,255,.55) 0 6px, transparent 6px 11px); }
+
+/* PN-40 junction view: a calm drawn picture shortly before a motorway exit / fork; landscape beside the map (right),
+   portrait under the banner (top set by lanes.js). Fixed dark "sign" palette in both themes, route in the banner green. */
+.jct { position: absolute; z-index: 12; display: none; overflow: hidden; border-radius: var(--radius); box-shadow: var(--shadow);
+  left: 12px; right: 12px; top: 200px; height: 260px; background: #1d2731; }
+.jct.open { display: block; animation: jct-in .18s var(--ease); }
+.jct svg { width: 100%; height: 100%; display: block; }
+.jct .bg { fill: #1d2731; }
+.jct polyline { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.jct .edge { stroke: #0f151b; }
+.jct .road { stroke: #5d6976; }
+.jct .appr { stroke-linecap: butt; }
+.jct .mark { stroke: #e9eef3; stroke-width: 2.5; stroke-dasharray: 12 14; opacity: .75; }
+.jct .way-edge { stroke: #0b3d24; stroke-width: 18; }
+.jct .way { stroke: #3fcf7f; stroke-width: 11; }
+.jct .head { fill: #3fcf7f; stroke: #0b3d24; stroke-width: 4; stroke-linejoin: round; }
+@keyframes jct-in { from { opacity: 0; } }
+@media (orientation: landscape) {
+  .jct { left: auto; right: 12px; top: 12px; width: min(420px, 34%); height: auto; aspect-ratio: 4 / 3; }
+}
+
+/* ===== PN-38 places along the route, PN-41 round trip + share by QR (along.js, roundtrip.js, qr.js) ===== */
+#sheet .tools { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 14px; }
+#sheet .tools .tool { flex: 1 1 auto; min-height: 56px; padding: 0 16px; font-size: 18px; font-weight: 600; }
+#sheet .tools .tool svg.i { width: 24px; height: 24px; }
+#btn-along { display: none; }
+.navigating #btn-along { display: grid; }
+#along .al-head { display: flex; align-items: center; gap: 10px; }
+#along .al-head .ttl { flex: 1; }
+#along .al-cats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+#along .al-cat, #rtrip .rt-km, #qrshare .qr-fmt { min-height: 64px; border-radius: var(--radius-sm); background: var(--surface-2);
+  color: var(--text-2); border: 2px solid transparent; font-size: 17px; font-weight: 600; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 4px; padding: 6px; }
+#along .al-cat svg.i { width: 26px; height: 26px; }
+#along .al-cat[aria-checked="true"], #rtrip .rt-km[aria-checked="true"], #qrshare .qr-fmt[aria-checked="true"] {
+  border-color: var(--accent); color: var(--text); }
+#along .al-cat[aria-checked="true"] svg.i { color: var(--accent); }
+#along .al-note { font-size: 18px; color: var(--text-2); }
+#along .al-note:empty { display: none; }
+#along .al-note.busy::before { content: ""; display: inline-block; width: 16px; height: 16px; margin-right: 10px; vertical-align: -2px;
+  border: 3px solid var(--surface-3); border-top-color: var(--accent); border-radius: 50%; animation: al-spin .8s linear infinite; }
+@keyframes al-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { #along .al-note.busy::before { animation: none; } }
+#along .al-list { display: flex; flex-direction: column; gap: 8px; }
+#along .al-row { background: var(--surface-2); min-height: 72px; padding: 6px 8px 6px 14px; gap: 12px; cursor: pointer; }
+#along .al-row:active { background: var(--surface-3); }
+#along .al-row .n { font-size: 20px; }
+#along .al-row .ico { background: var(--surface); }
+#along .al-row .ico.go { color: var(--accent); }
+#rtrip .rt-from { font-size: 19px; color: var(--text-2); }
+#rtrip .rt-kms { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+#rtrip .rt-km { font-size: 20px; }
+#pick .actions.sub { flex-wrap: wrap; }
+#pick .actions.sub .btn { flex: 1 1 28%; }
+#qrshare { position: absolute; inset: 0; z-index: 35; background: var(--scrim-2); display: none; align-items: center; justify-content: center; }
+#qrshare.open { display: flex; }
+#qrshare .qr-card { background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow); padding: 20px; display: flex;
+  flex-direction: column; align-items: stretch; gap: 16px; max-width: calc(100% - 24px); max-height: calc(100% - 24px); overflow-y: auto; }
+/* the code stays black on white in both themes, big enough to scan from the passenger seat */
+#qrshare .qr-code { width: min(calc(82vw * var(--ui-inv)), calc(52vh * var(--ui-inv)), 560px);   /* vw/vh are screen px: divided by the UI scale */ aspect-ratio: 1; background: #fff; border-radius: 12px; overflow: hidden; align-self: center; flex: none; }
+#qrshare .qr-code svg { display: block; width: 100%; height: 100%; }
+#qrshare .qr-side { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+#qrshare .ttl { font-size: 22px; font-weight: 700; }
+#qrshare .qr-name { font-size: 20px; font-weight: 600; overflow-wrap: anywhere; }
+#qrshare .qr-hint { font-size: 17px; color: var(--text-2); }
+#qrshare .qr-fmts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+#qrshare .qr-text { font-size: 14px; color: var(--text-3); overflow-wrap: anywhere; }
+@media (orientation: landscape) {
+  #qrshare .qr-card { flex-direction: row; align-items: center; }
+  #qrshare .qr-code { width: min(calc(100vh * var(--ui-inv) - 80px), 560px); }
+  #qrshare .qr-side { width: 360px; }
+  #along .al-cat { flex-direction: row; gap: 8px; min-height: 56px; }
+}

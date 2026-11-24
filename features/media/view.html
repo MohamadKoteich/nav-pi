@@ -1,0 +1,22 @@
+    <section class="view" id="media" data-i18n-label="app.media">
+      <div class="srcs" role="tablist">
+        <button data-src="Phone" role="tab"><svg class="i"><use href="#i-phone"/></svg><span data-i18n="src.phone"></span></button>
+        <button data-src="Music" role="tab"><svg class="i"><use href="#i-music"/></svg><span data-i18n="src.music"></span></button>
+        <button data-src="Audiobooks" role="tab"><svg class="i"><use href="#i-book"/></svg><span data-i18n="src.books"></span></button>
+        <button data-src="Podcasts" role="tab"><svg class="i"><use href="#i-podcast"/></svg><span data-i18n="src.podcasts"></span></button>
+      </div>
+      <div class="m-body" id="m-body"></div>
+      <div class="player" id="m-player" hidden>
+        <div class="p-info"><div class="p-title" id="p-title"></div><div class="p-sub" id="p-sub"></div></div>
+        <div class="p-seek"><span class="num" id="p-cur">0:00</span><div class="p-bar" id="p-bar"><div id="p-fill"></div></div><span class="num" id="p-dur">0:00</span></div>
+        <div class="p-ctl">
+          <button class="pc" id="p-rew" data-i18n-label="rew30"><svg class="i"><use href="#i-rew"/></svg></button>
+          <button class="pc" id="p-prev" data-i18n-label="prev"><svg class="i"><use href="#i-prev"/></svg></button>
+          <button class="pc big" id="p-play" data-i18n-label="playpause"><svg class="i"><use href="#i-play"/></svg></button>
+          <button class="pc" id="p-next" data-i18n-label="next"><svg class="i"><use href="#i-next"/></svg></button>
+          <button class="pc" id="p-fwd" data-i18n-label="fwd30"><svg class="i"><use href="#i-fwd"/></svg></button>
+        </div>
+        <div class="p-opts"><button class="btn ghost" id="p-speed" data-i18n-label="speed">1×</button>
+          <button class="btn ghost" id="p-sleep"><svg class="i"><use href="#i-moon"/></svg><span id="p-sleep-t"></span></button></div>
+      </div>
+    </section>

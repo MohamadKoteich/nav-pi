@@ -1,0 +1,25 @@
+    <!-- rail page (2026-11-22): was a Settings card -->
+    <section class="view page" id="gps" data-i18n-label="app.gps">
+      <header class="pg-head"><h1 data-i18n="gps.title"></h1></header>
+      <div class="pg-body">
+          <div class="card" id="gps-card">
+            <div class="card-h"><svg class="i"><use href="#i-gps"/></svg><span class="t" data-i18n="gps.title"></span><span class="c" id="gps-state"></span></div>
+            <div class="gps-none" id="gps-none" hidden>
+              <svg class="i big"><use href="#i-gps-off"/></svg>
+              <div><b data-i18n="gps.noRx"></b><div class="hint" data-i18n="gps.noRxHint"></div></div>
+            </div>
+            <div id="gps-body" hidden>
+              <div class="hint" id="gps-est" hidden data-i18n="gps.estHint"></div>
+              <div class="gps-grid">
+                <div class="gps-sky"><svg id="gps-sky" viewBox="-120 -120 240 240" role="img" data-i18n-label="gps.sky"></svg>
+                  <div class="gps-legend"><span class="u"></span><span data-i18n="gps.used"></span><span class="n"></span><span data-i18n="gps.seenOnly"></span></div></div>
+                <div class="gps-compass"><svg id="gps-compass" viewBox="-60 -60 120 120" role="img" data-i18n-label="gps.heading"></svg>
+                  <div class="gps-hd" id="gps-hd">–</div></div>
+                <div class="gps-vals" id="gps-vals"></div>
+              </div>
+              <div class="gps-bars-h" data-i18n="gps.signal"></div>
+              <div class="gps-bars" id="gps-bars"></div>
+            </div>
+          </div>
+      </div>
+    </section>

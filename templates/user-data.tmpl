@@ -1,0 +1,46 @@
+#cloud-config
+# nav-pi first boot. Key-only SSH, no password is set:
+# set one yourself later with `sudo passwd @PI_USER@` if you want a console login.
+hostname: @PI_HOSTNAME@
+manage_etc_hosts: true
+timezone: @TIMEZONE@
+keyboard:
+  model: pc105
+  layout: @KEYBOARD_LAYOUT@
+
+users:
+  - name: @PI_USER@
+    gecos: Navigation
+    groups: users,adm,dialout,audio,netdev,video,plugdev,input,gpio,spi,i2c,render,sudo
+    shell: /bin/bash
+    lock_passwd: true
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    ssh_authorized_keys:
+      - @SSH_PUBKEY@
+
+enable_ssh: true
+ssh_pwauth: false
+
+write_files:
+  - path: /etc/default/gpsd
+    content: |
+      # nav-pi: any USB u-blox receiver is picked up by gpsd's hotplug
+      START_DAEMON="true"
+      USBAUTO="true"
+      DEVICES=""
+      GPSD_OPTIONS="-n"
+    permissions: '0644'
+  - path: /etc/nav-pi/README
+    content: |
+      nav-pi: standalone offline car navigator / infotainment shell.
+      Map data lives in /srv/navdata (copied from the build PC, never fetched online).
+      Login: SSH key only (user @PI_USER@). Set a console password yourself: sudo passwd @PI_USER@
+    permissions: '0644'
+
+runcmd:
+  - [systemctl, enable, --now, ssh]
+  - [install, -m, '0755', /boot/firmware/nav-pi/firstboot.sh, /usr/local/sbin/nav-pi-firstboot.sh]
+  - [install, -m, '0644', /boot/firmware/nav-pi/nav-pi-firstboot.service, /etc/systemd/system/nav-pi-firstboot.service]
+  - [systemctl, daemon-reload]
+  - [systemctl, enable, nav-pi-firstboot.service]
+  - [systemctl, start, --no-block, nav-pi-firstboot.service]

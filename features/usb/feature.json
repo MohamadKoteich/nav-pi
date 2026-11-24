@@ -1,0 +1,29 @@
+{
+  "id": "usb",
+  "name": "USB sticks (mount, free space, eject; import music/audiobooks/podcasts)",
+  "requires": [
+    "core"
+  ],
+  "status": "stable",
+  "app": {
+    "css": [
+      "usb.css"
+    ],
+    "js": [
+      "usb.js"
+    ]
+  },
+  "fragments": {
+    "settings": "settings.html"
+  },
+  "pi": {
+    "packages": [
+      "udisks2",
+      "ntfs-3g",
+      "exfatprogs"
+    ],
+    "services": [
+      "usb"
+    ]
+  }
+}

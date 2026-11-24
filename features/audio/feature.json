@@ -1,0 +1,24 @@
+{
+  "id": "audio",
+  "name": "Sound output and volume",
+  "requires": [
+    "core",
+    "voice"
+  ],
+  "status": "stable",
+  "app": {
+    "js": [
+      "audio.js"
+    ]
+  },
+  "fragments": {
+    "settings": "settings.html"
+  },
+  "pi": {
+    "packages": [
+      "pipewire",
+      "wireplumber"
+    ],
+    "services": []
+  }
+}

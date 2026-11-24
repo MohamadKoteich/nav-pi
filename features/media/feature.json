@@ -1,0 +1,25 @@
+{
+  "id": "media",
+  "name": "Media: phone via Bluetooth, music, audiobooks, podcasts",
+  "requires": [
+    "core",
+    "audio"
+  ],
+  "status": "stable",
+  "app": {
+    "css": [
+      "media.css"
+    ],
+    "js": [
+      "media.js"
+    ]
+  },
+  "fragments": {
+    "dock": "dock.html",
+    "view": "view.html"
+  },
+  "pi": {
+    "packages": [],
+    "services": []
+  }
+}

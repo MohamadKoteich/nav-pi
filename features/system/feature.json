@@ -1,0 +1,25 @@
+{
+  "id": "system",
+  "name": "System info, Pi health (temperature, load, memory, power, services), power and updates",
+  "requires": [
+    "core"
+  ],
+  "status": "stable",
+  "app": {
+    "css": [
+      "system.css"
+    ],
+    "js": [
+      "system.js",
+      "updates.js",
+      "health.js"
+    ]
+  },
+  "fragments": {
+    "settings": "settings.html"
+  },
+  "pi": {
+    "packages": [],
+    "services": []
+  }
+}

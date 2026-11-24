@@ -1,0 +1,33 @@
+      <div class="card" data-cat="display">
+        <div class="card-h"><svg class="i"><use href="#i-sun"/></svg><span class="t" data-i18n="ui.mode"></span></div>
+        <div class="seg seg3">
+          <button data-ui-mode="light" data-i18n="ui.light"></button><button data-ui-mode="dark" data-i18n="ui.dark"></button><button data-ui-mode="auto" data-i18n="ui.auto"></button>
+        </div>
+        <div class="hint ui-sun"></div>
+        <div class="hint" data-i18n="ui.hint"></div>
+      </div>
+      <div class="card" data-cat="display">
+        <div class="card-h"><svg class="i"><use href="#i-screen"/></svg><span class="t" data-i18n="screen"></span></div>
+        <div class="seg" id="rot">
+          <button data-rot="90" data-i18n="rot.90"></button><button data-rot="270" data-i18n="rot.270"></button>
+          <button data-rot="normal" data-i18n="rot.normal"></button><button data-rot="180" data-i18n="rot.180"></button>
+        </div>
+        <div class="br br-ui" hidden>
+          <svg class="i"><use href="#i-sun"/></svg>
+          <input type="range" class="br-range" min="8" max="100" step="1" data-i18n-label="br">
+          <span class="num pct br-pct">–</span>
+        </div>
+        <div class="dim-row br-ui" hidden>
+          <svg class="i"><use href="#i-moon"/></svg><span class="t" data-i18n="br.dim"></span>
+          <button class="switch dim-sw" role="switch" aria-checked="false" data-i18n-label="br.dim"><span></span></button>
+        </div>
+        <div class="hint br-ui" hidden data-i18n="br.dimHint"></div>
+      </div>
+      <!-- UI size (PN-73 part, 2026-11-22): a multiplier on the automatic screen scale (core/scale.js), kept on this device -->
+      <div class="card" id="uisize-card" data-cat="display">
+        <div class="card-h"><svg class="i"><use href="#i-textsize"/></svg><span class="t" data-i18n="uisize"></span></div>
+        <div class="seg" id="uisize">
+          <button data-uisize="small" data-i18n="uisize.small"></button><button data-uisize="normal" data-i18n="uisize.normal"></button><button data-uisize="large" data-i18n="uisize.large"></button>
+        </div>
+        <div class="hint" id="uisize-hint"></div>
+      </div>

@@ -1,0 +1,26 @@
+{
+  "id": "places",
+  "name": "Places: Home, Work, favourites, parked car and recent destinations on one rail page (TomTom 'My Places' style)",
+  "requires": [
+    "core",
+    "nav"
+  ],
+  "status": "stable",
+  "app": {
+    "css": [
+      "places.css"
+    ],
+    "js": [
+      "places-i18n.js",
+      "places.js"
+    ]
+  },
+  "fragments": {
+    "dock": "dock.html",
+    "view": "view.html"
+  },
+  "pi": {
+    "packages": [],
+    "services": []
+  }
+}

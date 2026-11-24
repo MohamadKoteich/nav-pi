@@ -1,0 +1,48 @@
+/* On-screen keyboard (PN-KBD-03): a floating, compact panel; keyboard.js sets --kw / --kh (key width / height from
+   the S/M/L size, never below 44 x 48 px on the glass), --kmin (44 px on the glass: a key may shrink to it, never
+   below), left/top (bottom-centre, or above/below the focused field) and max-width (the window), and data-fit
+   ("row": the number column became a digit row; "tight": smaller gaps) when the window is too small.
+   The page is zoomed by --ui-s (core/scale.js): 100vw is screen px, so it is multiplied by --ui-inv here (EDITIONS rule 1). */
+#kbd { position: fixed; left: 8px; top: 8px; z-index: 35; display: none; box-sizing: border-box;
+  background: var(--kbd-bg); border-radius: 18px; padding: 8px;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, .45), 0 0 0 1px var(--line);
+  touch-action: none; user-select: none; -webkit-user-select: none; }
+#kbd.open { display: block; }
+#kbd .kb-main { display: flex; gap: 8px; }
+#kbd .kb-letters, #kbd .kb-pad { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+#kbd .kb-letters { flex: 1 1 auto; }
+#kbd .kb-pad { flex: 0 1 auto; padding-left: 8px; border-left: 1px solid var(--line); }
+#kbd .r { display: flex; gap: 6px; justify-content: center; }
+#kbd .k { position: relative; flex: 0 1 var(--kw); min-width: var(--kmin, 0); width: var(--kw); height: var(--kh); padding: 0;
+  background: var(--surface-3); color: var(--text); border-radius: 10px; font-size: calc(var(--kh) * .44); line-height: 1;
+  transition: background-color 90ms ease-out, transform 90ms ease-out; }
+#kbd .k.down, #kbd .k:active { background: var(--kbd-down); transform: scale(.96); }
+#kbd .k.w { flex: 1 1 calc(var(--kw) * 1.4); width: auto; font-size: 18px; }
+#kbd .k.sp { flex: 4 1 calc(var(--kw) * 3); width: auto; font-size: 15px; color: var(--text-3); }
+#kbd .k.n { background: var(--surface-2); }
+#kbd .k svg { display: block; margin: auto; }
+#kbd .k.sh.on, #kbd .k.ok, #kbd .k.opt.on { background: var(--accent); color: var(--accent-on); }
+#kbd .k[data-hint]::after { content: attr(data-hint); position: absolute; top: 3px; right: 5px; font-size: 12px; color: var(--text-3); }
+/* full width (big fingers): keys share the whole window width */
+#kbd[data-layout="wide"] { width: calc(100vw * var(--ui-inv, 1) - 16px); }
+#kbd[data-layout="wide"] .k { flex: 1 1 0; width: auto; }
+#kbd[data-layout="wide"] .k.w { flex: 1.5 1 0; }
+#kbd[data-layout="wide"] .k.sp { flex: 5 1 0; }
+/* a small window (480 px wide): less space between keys so ten keys stay >= 44 px on the glass */
+#kbd[data-fit~="tight"] { padding: 4px; border-radius: 14px; }
+#kbd[data-fit~="tight"] .kb-main, #kbd[data-fit~="tight"] .r { gap: 3px; }
+#kbd[data-fit~="tight"] .kb-letters, #kbd[data-fit~="tight"] .kb-pad { gap: 3px; }
+#kbd[data-fit~="tight"][data-layout="wide"] { width: calc(100vw * var(--ui-inv, 1) - 8px); }
+/* hold a key: its variants */
+#kbd .kb-pop { position: absolute; display: flex; gap: 4px; padding: 6px; z-index: 2; background: var(--surface);
+  border-radius: 14px; box-shadow: 0 8px 24px rgba(0, 0, 0, .45), 0 0 0 1px var(--line); }
+#kbd .kb-pop[hidden] { display: none; }
+#kbd .kb-pop .k { flex: none; width: var(--kw); }
+#kbd .kb-pop .k.sel { background: var(--accent); color: var(--accent-on); }
+/* options (layout + size), opened from the keyboard's own options key */
+#kbd .kb-menu { display: flex; flex-direction: column; gap: 10px; min-width: min(560px, calc(100vw * var(--ui-inv, 1) - 32px)); }
+#kbd .kb-seg { display: flex; flex-direction: column; gap: 6px; }
+#kbd .kb-h { font-size: 15px; color: var(--text-3); text-transform: uppercase; letter-spacing: .06em; padding: 0 4px; }
+#kbd .kb-menu .k.opt { flex: 1 1 0; width: auto; font-size: 18px; padding: 0 10px; }
+#kbd .kb-tip { font-size: 15px; color: var(--text-2); padding: 0 4px; }
+#kbd .kb-menu .k.w { flex: 1 1 0; }

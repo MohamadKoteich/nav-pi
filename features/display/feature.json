@@ -1,0 +1,23 @@
+{
+  "id": "display",
+  "name": "Screen orientation, brightness, dim at night",
+  "requires": [
+    "core"
+  ],
+  "status": "stable",
+  "app": {
+    "js": [
+      "display.js"
+    ],
+    "css": [
+      "display.css"
+    ]
+  },
+  "fragments": {
+    "settings": "settings.html"
+  },
+  "pi": {
+    "packages": [],
+    "services": []
+  }
+}

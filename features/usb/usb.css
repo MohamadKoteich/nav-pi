@@ -1,0 +1,12 @@
+/* usb feature: stick list, import panel (folder -> Music / Audiobooks / Podcasts), copy progress */
+#usb-card[hidden], .usb-imp[hidden] { display: none; }
+.usb-imp { display: flex; flex-direction: column; gap: 10px; background: var(--surface-2); border-radius: var(--radius-sm); padding: 14px; }
+.usb-f { display: flex; flex-direction: column; gap: 8px; }
+.usb-f .n { font-size: 21px; font-weight: 600; overflow-wrap: anywhere; }
+.usb-f .c { font-size: 17px; color: var(--text-2); }
+.usb-dest { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.usb-dest button { min-height: 56px; border-radius: 12px; background: var(--surface-3); font-size: 18px; padding: 0 4px; }
+.usb-dest button.on { background: var(--accent); color: var(--accent-on); font-weight: 700; }
+.usb-bar { height: 16px; border-radius: 8px; background: var(--surface-3); overflow: hidden; }
+.usb-bar div { height: 100%; width: 0; background: var(--accent); transition: width .3s; }
+.usb-imp .qrow .btn { flex: 1; }

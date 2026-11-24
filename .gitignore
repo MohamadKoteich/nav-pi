@@ -1,0 +1,18 @@
+work/
+config.env
+__pycache__/
+tools/shots/
+offline/*
+!offline/README.md
+disk/
+# a local Playwright install for the UI tests (npm install playwright) stays out of the repo
+node_modules/
+/package.json
+/package-lock.json
+# keys never belong in the repo
+*.pem
+*.key
+id_rsa*
+id_ed25519*
+*-key
+*-key.pub

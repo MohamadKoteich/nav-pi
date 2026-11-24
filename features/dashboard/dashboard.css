@@ -1,0 +1,48 @@
+/* dashboard feature (PN-47): split screen in landscape — map left (62 %), a column of glanceable cards right.
+   #app.dash-on is set by dashboard.js only in landscape; #dash sits in #views next to #maps and shows only while
+   Maps is the active view. Numbers are tabular so 1 Hz updates never shift the layout. */
+#dash { display: none; }
+@media (orientation: landscape) {
+  #app.dash-on #maps { right: 38%; }
+  #app.dash-on #maps.active ~ #dash { display: flex; }
+}
+#dash { position: absolute; top: 0; right: 0; bottom: 0; width: 38%; padding: 12px 12px 12px 0; gap: 12px;
+  flex-direction: column; background: var(--bg); z-index: 5; min-width: 0; }
+#dash .dcard { background: var(--surface); border-radius: var(--radius); padding: 14px 18px; min-width: 0; display: flex; flex-direction: column; gap: 10px; }
+#dash .dlbl { font-size: 15px; color: var(--text-3); text-transform: uppercase; letter-spacing: .06em; font-weight: 600; }
+/* clock */
+#dash .d-clock { flex-direction: row; align-items: baseline; justify-content: space-between; gap: 12px; padding: 10px 18px; }
+#dash .d-clock .t { font-size: 52px; font-weight: 800; line-height: 1; }
+#dash .d-clock .d { font-size: 19px; color: var(--text-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* trip */
+#dash .d-trip { flex: 1; justify-content: center; }
+#dash .d-man { display: flex; align-items: center; gap: 14px; background: var(--guide); color: #fff; border-radius: var(--radius-sm); padding: 10px 14px; }
+#dash .d-man .arrow { width: 56px; height: 56px; flex: none; }
+#dash .d-man .arrow svg { width: 100%; height: 100%; fill: #fff; }
+#dash .d-man .dist { font-size: 34px; font-weight: 800; line-height: 1; }
+#dash .d-man .street { font-size: 19px; font-weight: 600; margin-top: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#dash .d-facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+#dash .d-facts > div { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+#dash .d-facts b { font-size: 30px; font-weight: 800; line-height: 1.1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#dash .d-facts b.ok { color: var(--ok); }
+#dash .d-facts small { font-size: 15px; color: var(--text-3); }
+#dash .d-speed { display: flex; align-items: baseline; gap: 8px; }
+#dash .d-speed b { font-size: 64px; font-weight: 800; line-height: 1; }
+#dash .d-speed small { font-size: 20px; color: var(--text-3); }
+#dash [hidden] { display: none !important; }
+/* now playing */
+#dash .d-np { flex-direction: row; align-items: center; gap: 14px; }
+#dash .d-np .meta { flex: 1; min-width: 0; }
+#dash .d-np .ttl { font-size: 21px; font-weight: 700; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; overflow-wrap: anywhere; }
+#dash .d-np .ttl.none { color: var(--text-2); font-weight: 500; }
+#dash .d-np .pc { width: 64px; height: 64px; border-radius: 50%; background: var(--surface-3); display: grid; place-items: center; flex: none; transition: transform .12s var(--ease); }
+#dash .d-np .pc.big { width: 72px; height: 72px; background: var(--accent); color: var(--accent-on); }
+#dash .d-np .pc:active { transform: scale(.94); }
+#dash .d-np .btn { min-height: 64px; font-size: 19px; padding: 0 20px; flex: none; }
+/* map button (in #maps; landscape only) */
+#btn-dash { display: none; }
+#btn-dash.on { background: var(--accent); color: var(--accent-on); }
+@media (orientation: landscape) { #btn-dash { display: grid; } }
+/* too narrow for two columns (3.5" screens, core/scale.js data-fit): map only, like portrait */
+:root[data-fit~="narrow"] #btn-dash, :root[data-fit~="narrow"] #app.dash-on #maps.active ~ #dash { display: none; }
+:root[data-fit~="narrow"] #app.dash-on #maps { right: 0; }

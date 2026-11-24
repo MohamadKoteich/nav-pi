@@ -1,0 +1,28 @@
+{
+  "id": "gps",
+  "name": "GPS receiver (gpsd): fix relay, status page, dead reckoning in tunnels",
+  "requires": [
+    "core"
+  ],
+  "status": "stable",
+  "app": {
+    "css": [
+      "gps.css"
+    ],
+    "js": [
+      "deadreckon.js",
+      "gps.js"
+    ]
+  },
+  "fragments": {
+    "dock": "dock.html",
+    "view": "view.html"
+  },
+  "pi": {
+    "packages": [
+      "gpsd",
+      "gpsd-clients"
+    ],
+    "services": []
+  }
+}

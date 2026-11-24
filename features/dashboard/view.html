@@ -1,0 +1,27 @@
+    <!-- PN-47 split-screen dashboard (landscape): sits next to #maps, shown only while Maps is active and the split is on -->
+    <aside id="dash" data-i18n-label="dash.title">
+      <div class="dcard d-clock"><span class="t num" id="d-time">--:--</span><span class="d" id="d-date"></span></div>
+      <div class="dcard d-trip">
+        <div class="d-man" id="d-man" hidden><div class="arrow" id="d-arrow"></div>
+          <div style="min-width:0;flex:1"><div class="dist num" id="d-dist"></div><div class="street" id="d-street"></div></div></div>
+        <div class="d-facts num" id="d-navfacts" hidden>
+          <div><b class="ok" id="d-arrive">--:--</b><small data-i18n="dash.arrive"></small></div>
+          <div><b id="d-left">–</b><small data-i18n="dash.left"></small></div>
+          <div><b id="d-rest">–</b><small data-i18n="dash.time"></small></div>
+        </div>
+        <div class="d-speed num"><b id="d-speed">–</b><small>km/h</small></div>
+        <div class="d-facts num" id="d-tripa">
+          <div><b id="d-a-dist">–</b><small data-i18n="dash.tripA"></small></div>
+          <div><b id="d-a-time">–</b><small data-i18n="trip.time"></small></div>
+          <div><b id="d-a-avg">–</b><small data-i18n="trip.avg"></small></div>
+        </div>
+      </div>
+      <div class="dcard d-np" id="d-np" hidden>
+        <svg class="i" aria-hidden="true"><use href="#i-music"/></svg>
+        <div class="meta"><div class="dlbl" data-i18n="dash.np"></div><div class="ttl" id="d-np-title"></div></div>
+        <button class="btn ghost" id="d-np-open" data-i18n="dash.openMedia" hidden></button>
+        <button class="pc big" id="d-np-play" data-i18n-label="playpause"><svg class="i"><use href="#i-play"/></svg></button>
+        <button class="pc" id="d-np-next" data-i18n-label="next"><svg class="i"><use href="#i-next"/></svg></button>
+      </div>
+    </aside>
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="i-split" viewBox="0 0 24 24"><path d="M3 15h8v-2H3v2zm0 4h8v-2H3v2zm0-8h8V9H3v2zm0-6v2h8V5H3zm10 0h8v14h-8V5z"/></symbol></svg>

@@ -1,0 +1,65 @@
+#!/usr/bin/env python3
+"""Fake lsblk + udisksctl for tests and local UI screenshots (symlinks fake-lsblk / fake-udisksctl point here; LSBLK=, UDISKSCTL=).
+State in $FAKE_USB_STATE (json): {"sticks": [{"disk", "tran", "parts": [{"dev","fstype","label","uuid","size","dir","mount_fail","busy"}]}],
+"mounted": {dev: dir}, "calls": [argv...]}. "Mounting" a partition just reports its backing folder `dir` as the mount point."""
+import json, os, sys
+
+SP = os.environ.get("FAKE_USB_STATE", "/tmp/fake-usb.json")
+st = json.load(open(SP))
+me = os.path.basename(sys.argv[0])
+st.setdefault("calls", []).append([me] + sys.argv[1:])
+
+
+def save():
+    json.dump(st, open(SP, "w"))
+
+
+def part(dev):
+    for s in st["sticks"]:
+        for p in s["parts"]:
+            if p["dev"] == dev:
+                return s, p
+    return None, None
+
+
+if me == "fake-lsblk":
+    def node(d, typ, **kw):
+        return {"name": d, "path": d, "type": typ, **kw}
+    out = [node("/dev/mmcblk0", "disk", rm=False, hotplug=False, tran=None, fstype=None, label=None, uuid=None, size=256000000000, mountpoints=[None],
+                children=[node("/dev/mmcblk0p2", "part", rm=False, hotplug=False, tran=None, fstype="ext4", label="rootfs", uuid="r", size=255000000000, mountpoints=["/"])])]
+    for s in st["sticks"]:
+        ch = [node(p["dev"], "part", rm=True, hotplug=True, tran=None, fstype=p["fstype"], label=p["label"] or None, uuid=p["uuid"] or None,
+                   size=p["size"], mountpoints=[st["mounted"].get(p["dev"])]) for p in s["parts"]]
+        out.append(node(s["disk"], "disk", rm=True, hotplug=True, tran=s.get("tran", "usb"), fstype=None, label=None, uuid=None, size=sum(p["size"] for p in s["parts"]),
+                        mountpoints=[None], children=ch))
+    save()
+    print(json.dumps({"blockdevices": out}))
+    sys.exit(0)
+
+cmd, args = sys.argv[1], sys.argv[2:]
+dev = args[args.index("-b") + 1] if "-b" in args else ""
+s, p = part(dev) if cmd != "power-off" else (next((x for x in st["sticks"] if x["disk"] == dev), None), None)
+rc = 0
+if cmd == "mount":
+    if not p:
+        rc = 1; sys.stderr.write("Error looking up object for device %s\n" % dev)
+    elif p.get("mount_fail"):
+        rc = 1; sys.stderr.write("Error mounting %s: GDBus.Error:org.freedesktop.PolicyKit1.Error.NotAuthorized: Not authorized\n" % dev)
+    else:
+        st["mounted"][dev] = p["dir"]; print("Mounted %s at %s" % (dev, p["dir"]))
+elif cmd == "unmount":
+    if not p or dev not in st["mounted"]:
+        rc = 1; sys.stderr.write("Error unmounting: not mounted\n")
+    elif p.get("busy"):
+        rc = 1; sys.stderr.write("Error unmounting %s: target is busy\n" % dev)
+    else:
+        del st["mounted"][dev]
+elif cmd == "power-off":
+    if not s or any(q["dev"] in st["mounted"] for q in s["parts"]):
+        rc = 1; sys.stderr.write("Error: not possible\n")
+    else:
+        st["sticks"].remove(s)
+else:
+    rc = 2
+save()
+sys.exit(rc)

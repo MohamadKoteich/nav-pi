@@ -1,0 +1,11 @@
+/* wifi feature: password panel */
+.wifi-pass { display: flex; flex-direction: column; gap: 10px; background: var(--surface-2); border-radius: var(--radius-sm); padding: 14px; }
+.wifi-in { display: flex; gap: 10px; align-items: center; }
+.wifi-in input { flex: 1; min-width: 0; height: var(--tap); background: var(--surface-3); border: 0; border-radius: 12px; color: var(--text);
+  font: inherit; font-size: 24px; padding: 0 16px; }
+.wifi-in input:focus { outline: 3px solid var(--accent); }
+#settings.kb .st-pane { padding-bottom: 380px; }   /* room for the on-screen keyboard under the password field */
+.wifi-sig { position: relative; display: inline-flex; }
+.wifi-sig .lk { position: absolute; right: -8px; bottom: -6px; width: 16px; height: 16px; color: var(--text); }
+.wifi-pass[hidden] { display: none; }
+#wifi-card[hidden], #wifi-absent[hidden] { display: none; }

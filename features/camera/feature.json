@@ -1,0 +1,9 @@
+{
+  "id": "camera",
+  "name": "Reverse camera",
+  "requires": [
+    "core"
+  ],
+  "status": "idea",
+  "note": "planned, not implemented"
+}

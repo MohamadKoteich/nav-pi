@@ -1,0 +1,13 @@
+// nav-pi (system feature, PN-22/23): navd runs as user @USER@ without a login session and without sudo. This rule lets
+// that ONE user start / stop / restart exactly these systemd units, nothing else (no other unit, no enable/disable,
+// no daemon-reload, no power actions beyond the separate 50-nav-pi-power rule):
+//   nav-pi-tiles, nav-pi-valhalla, nav-pi        restart after the map region switch (and navd itself)
+//   nav-pi-os-update, nav-pi-app-update          root oneshot units that do the real work (apt upgrade / app rsync)
+polkit.addRule(function(action, subject) {
+  if (subject.user != "@USER@" || action.id != "org.freedesktop.systemd1.manage-units") return;
+  var units = ["nav-pi-tiles.service", "nav-pi-valhalla.service", "nav-pi.service",
+               "nav-pi-os-update.service", "nav-pi-app-update.service"];
+  var verbs = ["start", "stop", "restart"];
+  if (units.indexOf(action.lookup("unit")) >= 0 && verbs.indexOf(action.lookup("verb")) >= 0)
+    return polkit.Result.YES;
+});

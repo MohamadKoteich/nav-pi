@@ -1,0 +1,13 @@
+[Unit]
+Description=nav-pi first-boot setup (retries each boot until done)
+Wants=network-online.target time-sync.target
+After=network-online.target
+ConditionPathExists=!/etc/nav-pi/first-boot-done
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/sbin/nav-pi-firstboot.sh
+TimeoutStartSec=3600
+
+[Install]
+WantedBy=multi-user.target

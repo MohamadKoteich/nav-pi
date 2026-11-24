@@ -1,0 +1,6 @@
+#!/bin/bash
+# Fake systemctl for tests and local UI runs (NAV_SYSTEMCTL=tests/fake-systemctl): logs its arguments to $FAKE_SYSTEMCTL_LOG,
+# `is-active` answers "not active", everything else succeeds. Nothing is started or restarted.
+echo "$*" >> "${FAKE_SYSTEMCTL_LOG:-/tmp/fake-systemctl.log}"
+[ "$1" = is-active ] && exit 3
+exit 0

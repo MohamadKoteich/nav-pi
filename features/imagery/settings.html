@@ -1,0 +1,38 @@
+      <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+        <!-- Material "satellite" + "download" + "crop free" shapes -->
+        <symbol id="i-sat" viewBox="0 0 24 24"><path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zM5 5h3a3 3 0 0 1-3 3zm0 7v-2a5 5 0 0 0 5-5h2a7 7 0 0 1-7 7zm0 6 3.5-4.5 2.5 3 3.5-4.5 4.5 6z"/></symbol>
+        <symbol id="i-dl" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7zM5 18v2h14v-2z"/></symbol>
+        <symbol id="i-frame" viewBox="0 0 24 24"><path d="M3 5v4h2V5h4V3H5a2 2 0 0 0-2 2zm2 10H3v4a2 2 0 0 0 2 2h4v-2H5zm14 4h-4v2h4a2 2 0 0 0 2-2v-4h-2zm0-16h-4v2h4v4h2V5a2 2 0 0 0-2-2z"/></symbol>
+      </svg>
+      <div class="card" data-cat="sat" id="sat-card">
+        <div class="card-h"><svg class="i"><use href="#i-sat"/></svg><span class="t" data-i18n="sat.areas"></span><span class="c num" id="sat-free"></span></div>
+        <div class="hint" data-i18n="sat.hint"></div>
+        <div class="list" id="sat-packs"></div>
+        <div class="list" id="sat-unfinished"></div>
+        <div class="sat-dl" id="sat-dl">
+          <div class="sat-lbl"><svg class="i"><use href="#i-dl"/></svg><span data-i18n="sat.dlTitle"></span></div>
+          <div class="hint" data-i18n="sat.dlHint"></div>
+          <div class="qrow sat-area-btns">
+            <button class="btn ghost" id="sat-view"><svg class="i"><use href="#i-map"/></svg><span data-i18n="sat.useView"></span></button>
+            <button class="btn ghost" id="sat-pick"><svg class="i"><use href="#i-frame"/></svg><span data-i18n="sat.choose"></span></button>
+          </div>
+          <div class="sat-area" id="sat-area"></div>
+          <div class="sat-lbl2" data-i18n="sat.detail"></div>
+          <div class="seg seg3" id="sat-level" role="radiogroup">
+            <button data-level="overview" role="radio" data-i18n="sat.overview"></button><button data-level="standard" role="radio" data-i18n="sat.standard"></button><button data-level="high" role="radio" data-i18n="sat.high"></button>
+          </div>
+          <div class="list" id="sat-provs" role="radiogroup"></div>
+          <div class="sat-est" id="sat-est" aria-live="polite"></div>
+          <button class="btn primary wide" id="sat-start"><svg class="i"><use href="#i-dl"/></svg><span data-i18n="sat.start"></span></button>
+        </div>
+        <div class="sat-job" id="sat-job" hidden>
+          <div class="sat-job-t" id="sat-job-t"></div>
+          <div class="usb-bar sat-bar"><div id="sat-bar"></div></div>
+          <div class="sat-job-s num" id="sat-job-s"></div>
+          <div class="qrow"><button class="btn ghost" id="sat-pause"></button><button class="btn danger" id="sat-cancel" data-i18n="sat.cancel"></button></div>
+        </div>
+        <div class="sat-usb" id="sat-usb" hidden>
+          <div class="sat-lbl"><svg class="i"><use href="#i-usb"/></svg><span data-i18n="sat.usbTitle"></span></div>
+          <div class="list" id="sat-usb-list"></div>
+        </div>
+      </div>

@@ -1,0 +1,8 @@
+[Unit]
+Description=nav-pi OS update (apt update + upgrade), started by the user from Settings > Updates
+After=network-online.target
+Wants=network-online.target
+[Service]
+Type=oneshot
+ExecStart=/usr/local/lib/nav-pi/os-update.sh
+TimeoutStartSec=3h

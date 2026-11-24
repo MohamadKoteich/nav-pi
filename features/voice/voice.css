@@ -1,0 +1,2 @@
+/* voice feature: Settings card (PN-48). Muted: the style choices stay usable but read as inactive. */
+#vo-style.dim, #vo-turns.dim { opacity: .55; }

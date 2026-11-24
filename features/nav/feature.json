@@ -1,0 +1,53 @@
+{
+  "id": "nav",
+  "name": "Offline map, search, routing, turn-by-turn",
+  "requires": [
+    "core",
+    "gps",
+    "voice"
+  ],
+  "status": "stable",
+  "min_ram_mb": 1800,
+  "app": {
+    "head_css": [
+      "vendor/maplibre-gl.css"
+    ],
+    "css": [
+      "nav.css"
+    ],
+    "pre_js": [
+      "vendor/maplibre-gl.js"
+    ],
+    "js": [
+      "speedlimit.js",
+      "lanes.js",
+      "guidance.js",
+      "maps.js",
+      "along.js",
+      "roundtrip.js",
+      "qrcode.js",
+      "qr.js",
+      "probe.js"
+    ]
+  },
+  "fragments": {
+    "dock": "dock.html",
+    "view": "view.html",
+    "settings": "settings.html"
+  },
+  "pi": {
+    "packages": [
+      "docker.io"
+    ],
+    "services": [
+      "tiles",
+      "valhalla"
+    ]
+  },
+  "data": [
+    "map",
+    "valhalla",
+    "search",
+    "fonts"
+  ]
+}

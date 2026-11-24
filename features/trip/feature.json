@@ -1,0 +1,25 @@
+{
+  "id": "trip",
+  "name": "Trip computer (A/B) and trip log with replay and GPX export",
+  "requires": [
+    "core",
+    "gps"
+  ],
+  "status": "stable",
+  "app": {
+    "css": [
+      "trip.css"
+    ],
+    "js": [
+      "trip.js"
+    ]
+  },
+  "fragments": {
+    "dock": "dock.html",
+    "view": "view.html"
+  },
+  "pi": {
+    "packages": [],
+    "services": []
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "id": "core",
+  "name": "Shell, settings frame, language, keyboard",
+  "requires": [],
+  "status": "stable",
+  "app": {
+    "css": [
+      "core.css",
+      "keyboard.css"
+    ],
+    "js": [
+      "i18n.js",
+      "util.js",
+      "keyboard.js",
+      "shell.js",
+      "settings.js",
+      "solar.js",
+      "theme.js"
+    ]
+  },
+  "pi": {
+    "packages": [
+      "labwc",
+      "wlr-randr",
+      "chromium",
+      "greetd",
+      "grim",
+      "rsync",
+      "fonts-noto-core"
+    ],
+    "services": [
+      "navd",
+      "kiosk"
+    ]
+  }
+}

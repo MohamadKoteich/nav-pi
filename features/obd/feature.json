@@ -1,0 +1,9 @@
+{
+  "id": "obd",
+  "name": "OBD-II car data (ELM327)",
+  "requires": [
+    "core"
+  ],
+  "status": "idea",
+  "note": "planned, not implemented"
+}

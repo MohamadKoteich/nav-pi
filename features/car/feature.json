@@ -1,0 +1,23 @@
+{
+  "id": "car",
+  "name": "Service reminders by date and/or km (oil, inspection, tyres, custom)",
+  "requires": [
+    "core"
+  ],
+  "status": "stable",
+  "app": {
+    "css": [
+      "car.css"
+    ],
+    "js": [
+      "car.js"
+    ]
+  },
+  "fragments": {
+    "settings": "settings.html"
+  },
+  "pi": {
+    "packages": [],
+    "services": []
+  }
+}

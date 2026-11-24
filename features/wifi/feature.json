@@ -1,0 +1,25 @@
+{
+  "id": "wifi",
+  "name": "Wi-Fi (networks, connect, forget; phone hotspot)",
+  "requires": [
+    "core"
+  ],
+  "status": "stable",
+  "app": {
+    "css": [
+      "wifi.css"
+    ],
+    "js": [
+      "wifi.js"
+    ]
+  },
+  "fragments": {
+    "settings": "settings.html"
+  },
+  "pi": {
+    "packages": [],
+    "services": [
+      "wifi"
+    ]
+  }
+}

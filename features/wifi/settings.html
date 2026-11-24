@@ -1,0 +1,18 @@
+      <div class="card tall" data-cat="connect" id="wifi-card" hidden>
+        <div class="card-h"><svg class="i"><use href="#i-wifi"/></svg><span class="t" data-i18n="wifi"></span>
+          <button class="switch" id="wifi-power" role="switch" aria-checked="false" data-i18n-label="wifi.toggle"><span></span></button></div>
+        <div class="hint" id="wifi-status"></div>
+        <div class="wifi-pass" id="wifi-pass" hidden>
+          <div class="hint" id="wifi-pass-for"></div>
+          <div class="wifi-in"><input id="wifi-pw" type="password" inputmode="none" autocomplete="off" autocapitalize="off" spellcheck="false" data-i18n-ph="wifi.password">
+            <button class="btn ghost sq" id="wifi-eye" data-i18n-label="wifi.show"><svg class="i"><use href="#i-eye"/></svg></button></div>
+          <div class="qrow"><button class="btn primary" id="wifi-go" data-i18n="wifi.connect"></button><button class="btn ghost" id="wifi-cancel" data-i18n="cancel"></button></div>
+        </div>
+        <div class="list" id="wifi-list"></div>
+        <button class="btn ghost wide" id="wifi-scan"><svg class="i"><use href="#i-refresh"/></svg><span data-i18n="wifi.scan"></span></button>
+        <div class="hint" data-i18n="wifi.hotspot"></div>
+      </div>
+      <div class="card" data-cat="connect" id="wifi-absent" hidden>
+        <div class="card-h"><svg class="i"><use href="#i-wifi-off"/></svg><span class="t" data-i18n="wifi"></span></div>
+        <div class="hint" data-i18n="wifi.absent"></div>
+      </div>

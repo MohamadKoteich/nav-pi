@@ -1,0 +1,29 @@
+{
+  "id": "safety",
+  "name": "Driver alerts: sharp curves, level crossings, break reminder, speed cameras (opt-in), low-emission zones",
+  "requires": [
+    "core",
+    "gps",
+    "nav"
+  ],
+  "status": "stable",
+  "app": {
+    "css": [
+      "safety.css"
+    ],
+    "js": [
+      "safety-i18n.js",
+      "safety.js"
+    ]
+  },
+  "fragments": {
+    "settings": "settings.html"
+  },
+  "pi": {
+    "packages": [],
+    "services": []
+  },
+  "data": [
+    "safety"
+  ]
+}

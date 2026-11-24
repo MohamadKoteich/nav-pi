@@ -1,0 +1,23 @@
+/* trip feature: counters card, trip log, replay bar */
+.trip-ctr { background: var(--surface-2); border-radius: var(--radius-sm); padding: 12px 14px; display: grid; grid-template-columns: 1fr auto; gap: 6px 12px; align-items: center; }
+.trip-ctr h3 { margin: 0; font-size: 20px; }
+.trip-ctr h3 small { display: block; font-size: 14px; font-weight: 400; color: var(--text-3); }
+.trip-ctr .btn { min-height: 56px; padding: 0 18px; font-size: 18px; border-radius: var(--radius-sm); background: var(--surface-3); }
+.trip-ctr .vals { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(4, auto); gap: 8px; }
+.trip-ctr .vals div { font-size: 24px; font-weight: 700; white-space: nowrap; }
+.trip-ctr .vals small { display: block; font-size: 13px; font-weight: 400; color: var(--text-3); }
+.trip-row { background: var(--surface-2); border-radius: var(--radius-sm); padding: 10px 14px; margin-bottom: 8px; display: grid; gap: 4px; }
+.trip-row .n { font-size: 20px; font-weight: 600; }
+.trip-row .st { font-size: 17px; color: var(--text-2); overflow-wrap: anywhere; }
+.trip-row .acts { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
+.trip-row .btn, .trip-row select { min-height: 56px; padding: 0 16px; font-size: 18px; border-radius: var(--radius-sm); background: var(--surface-3); color: var(--text); border: 0; font-family: inherit; }
+.trip-row .btn.primary { background: var(--accent); color: var(--accent-on); font-weight: 700; }
+.trip-row a.btn { display: inline-flex; align-items: center; text-decoration: none; }
+.trip-none { color: var(--text-2); font-size: 18px; padding: 6px 2px; }
+#trip-replay { position: absolute; z-index: 15; left: 12px; right: 12px; bottom: 12px; display: none; align-items: center; gap: 12px;
+  background: var(--surface); border-radius: var(--radius-sm); padding: 8px 12px; box-shadow: var(--shadow); }
+#trip-replay.open { display: flex; }
+#trip-replay .btn { width: 56px; height: 56px; flex: none; border-radius: 50%; background: var(--surface-3); display: grid; place-items: center; }
+#trip-replay input { flex: 1; min-width: 0; accent-color: var(--accent); }
+#trip-replay .lbl { font-size: 18px; color: var(--text-2); min-width: 118px; text-align: right; white-space: nowrap; }
+@media (orientation: landscape) { #trip-replay { right: auto; width: 640px; max-width: calc(100% - 24px); } }
