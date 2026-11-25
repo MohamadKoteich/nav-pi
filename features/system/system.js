@@ -56,6 +56,11 @@
   function bind() {
     bound = true;
     document.querySelectorAll("[data-pwr]").forEach(b => b.addEventListener("click", () => confirmPower(b.dataset.pwr)));
+    const term = $("st-terminal");   // a terminal over the app, for a USB keyboard; `exit` closes it (also Ctrl+Alt+T)
+    if (term) term.addEventListener("click", async () => {
+      try { await U.api("/api/system/terminal", {}); U.toast(T("sys.terminalOpen"), 6000); }
+      catch (e) { U.toast(T("failed", { msg: e.message })); }
+    });
   }
   // Restart / Shut down pinned at the bottom of the Settings category list, always visible
   const rail = document.querySelector("#settings .st-rail"), pwr = $("st-power");

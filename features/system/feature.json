@@ -19,7 +19,9 @@
     "settings": "settings.html"
   },
   "pi": {
-    "packages": [],
+    "packages": [
+      "foot"
+    ],
     "services": []
   }
 }

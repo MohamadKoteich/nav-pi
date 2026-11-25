@@ -1,4 +1,4 @@
-"""system feature: storage, data versions, app version, temperature, uptime; restart / shut down.
+"""system feature: storage, data versions, app version, temperature, uptime; restart / shut down; open a terminal on the screen (POST /api/system/terminal, NAV_TERMINAL).
 Power actions run `systemctl reboot|poweroff` as the navd user; the setup script installs a polkit rule that
 allows exactly these two logind actions for that user (pi/install-runtime.sh). Test overrides (env):
 THERMAL_FILE, UPTIME_FILE, NAV_SYSTEMCTL (command used instead of systemctl), NAV_VCGENCMD, PROC_DIR, CPUFREQ_FILE,
@@ -14,6 +14,7 @@ UPTIME = os.environ.get("UPTIME_FILE", "/proc/uptime")
 SYSTEMCTL = os.environ.get("NAV_SYSTEMCTL", "systemctl")
 REPLY_DELAY = 1.5
 ACTIONS = {"reboot": "reboot", "poweroff": "poweroff"}
+TERMINAL = os.environ.get("NAV_TERMINAL", "foot")   # Wayland terminal, opened on the kiosk screen (USB keyboard)
 
 
 def _read(path):
@@ -181,12 +182,34 @@ def power(h, q, j):
     return {"ok": True, "action": a}
 
 
+def _wayland_env():
+    """navd is a system service; the screen is the labwc session of the same user: find its socket."""
+    run = os.environ.get("XDG_RUNTIME_DIR") or "/run/user/%d" % os.getuid()
+    socks = sorted(n for n in os.listdir(run) if re.fullmatch(r"wayland-\d+", n)) if os.path.isdir(run) else []
+    if not socks:
+        return None
+    return dict(os.environ, XDG_RUNTIME_DIR=run, WAYLAND_DISPLAY=socks[0])
+
+
+def terminal(h, q, j):
+    """Open a terminal window over the app (needs a USB keyboard; `exit` closes it and the app is back)."""
+    if not shutil.which(TERMINAL):
+        return {"error": "no terminal installed (%s)" % TERMINAL}, 501
+    env = _wayland_env()
+    if env is None:
+        return {"error": "no screen session"}, 503
+    subprocess.Popen([TERMINAL], env=env, cwd=os.path.expanduser("~"), start_new_session=True,
+                     stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    return {"ok": True}
+
+
 def register(app):
     app.get("/api/system", info)
     app.get("/api/system/health", health)
     if not os.environ.get("NAV_NO_SAMPLER"):
         threading.Thread(target=_sampler, daemon=True, name="health-sampler").start()
     app.post("/api/system/power", power)
+    app.post("/api/system/terminal", terminal)
     try:   # PN-22/23: map, app and OS updates live in navd_system_updates.py (next to this file)
         import navd_system_updates
         navd_system_updates.register(app)

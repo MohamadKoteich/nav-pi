@@ -83,6 +83,13 @@ night, text and button size, split screen (landscape only).
 Car*: service reminders by date or km. *Settings > Pi health*: temperature, load, memory, storage, power supply
 and the services. *Settings > System*: versions, free space, *Restart*, *Shut down*.
 
+### Terminal on the screen
+
+With a USB keyboard plugged into the Pi, **Settings > System > Terminal** (or **Ctrl+Alt+T**) opens a full-screen
+terminal (`foot`) over the app, logged in as `nav`. `sudo` works without a password (see
+[SECURITY.md](SECURITY.md)). Type `exit` to close it and get the app back. Typical uses: `sudo nmtui` to set up
+Wi-Fi, `journalctl -u nav-pi` to read logs, `nano ~/.ssh/authorized_keys` to add an SSH key.
+
 ## Map data on the device
 
 *Settings > System > Updates* lists the **map data on this unit**: the region in use, the previous one, and any

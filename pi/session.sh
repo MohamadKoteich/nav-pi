@@ -38,6 +38,7 @@ mkdir -p "$HOME/.config/labwc"
   echo '<?xml version="1.0"?>'
   echo '<labwc_config>'
   echo '  <core><decoration>none</decoration></core>'
+  echo '  <keyboard><keybind key="C-A-t"><action name="Execute" command="foot"/></keybind></keyboard>'   # terminal (USB keyboard)
   echo '  <windowRules><windowRule identifier="*"><action name="Maximize"/></windowRule></windowRules>'
   while IFS= read -r t; do
     [ -n "$t" ] && [ -n "$OUTPUT" ] && echo "  <touch deviceName=\"$t\" mapToOutput=\"$OUTPUT\" mouseEmulation=\"no\"/>"

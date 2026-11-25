@@ -87,3 +87,6 @@ If you build devices for other people, also read the licence notes in the [READM
 
 Open an issue on GitHub. If the details should not be public, say so in the issue (without the details) and ask
 for a private channel.
+
+**Terminal on the screen.** Anyone with a USB keyboard at the screen can open a root-capable terminal from
+Settings > System > Terminal or Ctrl+Alt+T. Remove the `foot` package (and the button) if that is not wanted.
