@@ -8,6 +8,8 @@
 . "$(dirname "$0")/common.sh"
 DISK_DIR=${DISK_DIR:-$ROOT/disk}
 BS=4194304
+# GNU dd: uutils dd (Ubuntu 25.10+) fails direct reads from a block device with "IO error: Invalid input"
+DD=$(command -v gnudd || command -v dd)
 MIB=1048576
 M="$DISK_DIR/manifest.json"
 [ $# -ge 1 ] || fail "name the disk:  sudo bash $0 /dev/sdX   (lsblk -o NAME,SIZE,TRAN,MODEL,SERIAL shows it)"
@@ -60,7 +62,7 @@ wipefs -a "$DEV" >/dev/null
 for line in "${P[@]}"; do
   read -r f off sz _ <<<"$line"
   echo "$f"
-  dd if="$DISK_DIR/$f" of="$DEV" bs=$BS seek=$((off / BS)) oflag=direct conv=fsync,notrunc status=progress
+  "$DD" if="$DISK_DIR/$f" of="$DEV" bs=$BS seek=$((off / BS)) oflag=direct conv=fsync,notrunc status=progress
 done
 sync; blockdev --flushbufs "$DEV"; echo 3 > /proc/sys/vm/drop_caches
 fi   # VERIFY_ONLY skips the writing
@@ -70,7 +72,7 @@ for line in "${P[@]}"; do
   read -r f off sz want <<<"$line"
   # read exactly sz bytes in 1 MiB blocks (no 'head -c' cut: under pipefail the cut dd's SIGPIPE ended the
   # script silently after head.img, 2026-11-12 — data.img is a MiB multiple, not a 4 MiB one)
-  got=$(dd if="$DEV" bs=$MIB skip=$((off / MIB)) count=$((sz / MIB)) iflag=direct status=progress | sha256sum | cut -d' ' -f1)
+  got=$("$DD" if="$DEV" bs=$MIB skip=$((off / MIB)) count=$((sz / MIB)) iflag=direct status=progress | sha256sum | cut -d' ' -f1)
   echo "$f: expected $want"; echo "$f: on disk  $got"
   [ "$got" = "$want" ] || fail "$f differs on the disk — the disk, cable or USB port is faulty"
 done

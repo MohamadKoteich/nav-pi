@@ -8,6 +8,8 @@
 . "$(dirname "$0")/common.sh"
 BS=4194304
 LOG="$WORK_DIR/flash.log"
+# GNU dd: uutils dd (Ubuntu 25.10+) fails direct reads from a block device with "IO error: Invalid input"
+DD=$(command -v gnudd || command -v dd)
 
 if [ "${CHECK_ONLY:-0}" != 1 ]; then
   [ "$(id -u)" = 0 ] || fail "run it with sudo:  sudo bash $0"
@@ -79,11 +81,11 @@ grep -q "is the real thing" <<<"$F3" || fail "f3probe says this card is FAKE or 
 
 say "4/5 writing image ($((IMGSIZE/1000000)) MB) — direct I/O, so the progress is real"
 wipefs -a "$DEV" >/dev/null
-dd if="$IMG" of="$DEV" bs=$BS oflag=direct conv=fsync status=progress
+"$DD" if="$IMG" of="$DEV" bs=$BS oflag=direct conv=fsync status=progress
 sync; blockdev --flushbufs "$DEV"; echo 3 > /proc/sys/vm/drop_caches
 
 say "5/5 reading the card back and comparing"
-GOT=$(dd if="$DEV" bs=$BS count=$COUNT iflag=direct status=none | sha256sum | cut -d' ' -f1)
+GOT=$("$DD" if="$DEV" bs=$BS count=$COUNT iflag=direct status=none | sha256sum | cut -d' ' -f1)
 echo "expected $WANT"; echo "on card  $GOT"
 [ "$GOT" = "$WANT" ] || fail "card content differs from the image: the card or the card READER is faulty. Try another reader."
 

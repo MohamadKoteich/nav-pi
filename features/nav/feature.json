@@ -37,7 +37,8 @@
   },
   "pi": {
     "packages": [
-      "docker.io"
+      "docker.io",
+      "docker-cli"
     ],
     "services": [
       "tiles",

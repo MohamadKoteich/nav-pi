@@ -107,7 +107,7 @@ Which process needs what, and why:
 
 | Part | CPU | RAM | Notes |
 |---|---|---|---|
-| **Chromium + MapLibre (the UI)** | the main steady load: decoding vector tiles (web workers) and drawing every frame while the map moves; the GPU does the drawing | **the largest consumer** | load grows with screen resolution (`MAP_PIXEL_RATIO`), 3-D tilt (`MAP_MAX_PITCH`), map detail (the zoom level the map was cut to) and the satellite layer (raster tiles) |
+| **Chromium + MapLibre (the UI)** | the main steady load: decoding vector tiles (web workers) and drawing every frame while the map moves; the GPU does the drawing | **the largest consumer** (measured on a Pi 4 8 GB, idle after start, 2026-11-25: ~270 MiB main process + renderers; whole system 713 MiB) | load grows with screen resolution (`MAP_PIXEL_RATIO`), 3-D tilt (`MAP_MAX_PITCH`), map detail (the zoom level the map was cut to) and the satellite layer (raster tiles) |
 | **Valhalla (routing)** | short bursts: about 2–25 ms per car route on a Pi 5 (more for long routes, alternatives and the matrix calls of "places along the route"); idle otherwise | grows with use: graph tiles are read from the `.tar` and cached up to `max_cache_size` (1 GB in the generated config); plus the Docker daemon | `VALHALLA_THREADS` (1–2 per board) caps parallel work; the first route after boot is slower (cold cache, warmed by `pi/warm-valhalla.sh`) |
 | **navd** | low: JSON API, GPS stream, small SQLite queries | small | one Python process, standard library only |
 | **pmtiles serve** | low | small cache (`--cache-size=256`) | the map file itself is read from the card on demand, never loaded whole |

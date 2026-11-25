@@ -34,7 +34,7 @@ number marked as an estimate still waits for a real measurement.
 |---|---|---|
 | Raspberry Pi 5, 8 GB, SD card (option A) | on hardware | image build, card test + write + read-back, first boot, app and data install with sha256 check on the Pi; map at ~60 fps |
 | Raspberry Pi 4, 8 GB | on hardware | runs the advanced edition from an SD card, 5" Touch Display 2, landscape |
-| Self-contained disk (USB SSD) on a Pi 4 (option B) | partly | booted. The first boot failed twice, and the causes were fixed in the scripts. A fresh first boot with the current scripts has not been re-run |
+| Self-contained disk on a Pi 4 8 GB (option B, 256 GB microSD, Germany + Munich photos) | on hardware | 2026-11-25: written and read back (GNU dd), first boot stopped at the Valhalla image because the bundle lacked `docker-cli` (Debian 13 only recommends it; fixed in `features/nav/feature.json`). After installing it, setup finished: all services active, integrity OK (2), a Munich route answered. Idle after start: 713 MiB RAM used of 7.8 GiB; largest processes Chromium (~270 MiB main + renderers), Valhalla ~175 MiB, labwc ~100 MiB, dockerd ~90 MiB |
 | Pi 4 with 2 or 4 GB, Pi 5 with 4 GB | untested | the hardware profiles are estimates |
 | Other 64-bit boards (`hardware/90-generic.conf`) | untested | the profile is an estimate |
 | HDMI and other touch screens | automated | UI scaling checked at 800x480 up to 1920x1200 in the browser; output and touch mapping on a real HDMI screen untested |
